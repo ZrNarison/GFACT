@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block head %}{% endblock  %}
+{% block body %}
+{% form_theme form _self  %}
+<div class="container spacer col-md-5 col-xs-12 col-md-offset-3 mt-4">
+    <div class="card">
+        <div class="panel-primary bg-info"><h2 class="text-center">Nouveau</h2></div>
+        <div class="body col-md-8">
+            <div class="form-group mt-3">
+            {{ include ('data.html.twig', {form: form,button:('Enregistrer')} )}}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

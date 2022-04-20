@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="container">
+<div class="float-right">
+    <a href="#" class="btn btn-secondary">
+        <i class="fas fa-print">Imprimer</i>
+    </a>
+</div>
+    <h1 class="my-3 text-center">Liste de tous les commande</h1>
+    <div class="text-left">       
+    </div>
+    <div class="text-right">
+        <a href="{{path('Commande')}}" class="btn btn-primary rounded">Nouveau commande</a>
+    </div>
+    <div class="row">
+    {% if cmd | length > 0 %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th>Période</th>
+                    <th>Durée</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Montant</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            {% for c in cmd %}
+            <tbody>
+                <tr>
+                    <td>{{c.designation}}</td>
+                    <td>{{c.periode}}</td>
+                    <td>{{c.duree}}</td>
+                    <td>{{c.quantite}}</td>
+                    <td>{{c.prixunitaire}}</td>
+                    <td>{{c.quantite * c.prixunitaire}}</td>
+                    <td>
+                        <a href="{{path('edit_cmd',{'designation':c.designation})}}" class="btn btn-success btn-sm">
+                            <i class="fas fa-trash">Editer</i>
+                        </a>
+                        <a href="{{path('del_cmd',{'id':c.id})}}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash">Supprimer</i>
+                        </a>
+                    <td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-right mr-auto">Total:</td>
+                    {#<td>{{total}}</td>#}
+                </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        <p class="h1"><em>Aucune commande a ajouté</em></p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

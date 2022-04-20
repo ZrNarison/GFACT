@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="{{path('home')}}"><strong>G-FACT</strong></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>        
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="{{path('home')}}"><img src="/img/acceuil.jpg" class="rounded"/>Acceuil</a>
+            </li>
+            <li class="nav-item dropdown" id="new">
+                <a class="nav-link dropdown-toggle " data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="/img/ajout1.jpg" class="rounded"/>Facturation</a>
+                <div class="dropdown-menu" id="newid">
+                    <a class="dropdown-item" href="{{path('Nouveau')}}"><img src="/img/ajout0.jpg" class="rounded"/>Achat</a>
+                    <a class="dropdown-item" href="{{path('Liste')}}"><img src="/img/checklist-154274_960_720.jpg" class="rounded"/>Liste</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><img src="/img/cadena.jpg" class="rounded"/>Paramettre</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Help</a>
+            </li>
+        </ul>
+        <form class="d-flex ml-auto">
+        <input class="form-control me-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+    </div>
+</nav>
