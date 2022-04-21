@@ -56,7 +56,7 @@ class Cmd
     
     // public function __construct()
     // {
-    //    return $this->Client;
+    //    $this->Client =getClient();
     // }
 
     public function getId(): ?int

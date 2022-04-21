@@ -8,20 +8,35 @@ use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\CmdRepository;
 use App\Repository\ClientRepository;
+use Doctrine\Persistence\ObjectManager;
+use Automattic\Jetpack\Connection\Manager;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class Accueil extends AbstractController{
+    
+    /**
+     * @Route("/",name="login_account")
+     * @return Response
+     */
+    public function login()
+    {
+        return $this->render('login.html.twig');
+    }
+    
     /**
      * Undocumented function
-     *@Route("/", name="home")
+     *@Route("/Home", name="home")
+     *@Route("/Accueil")
+     *@Route("/Homepage")
+     *@Route("/home")
+     *@Route("/homepage")
      * @return response
      */
     public function index(){
@@ -91,12 +106,14 @@ class Accueil extends AbstractController{
     }
     /**
      * Undocumented function
-     *@Route("/Suppression/Cmd/{id}", name="del_cmd")
+     *@Route("/Suppression/{id}", name="del_cmd")
      * @return Response
      */
-    public function suppression_cmd($id,SessionInterface $session,CmdRepository $vend)
+    public function del_cmd(CmdRepository $cmd,ObjectManager $manager)
     {
-        $cmd=$session->get('Cmd',[]);
+        // $manager = $this -> getDoctrine()->getManager();
+        $manager->remove($cmd);
+        $manager->flush();
         return $this->redirectToRoute('Liste');
     }
     /**
@@ -108,4 +125,14 @@ class Accueil extends AbstractController{
     {
         return $this->redirectToRoute('Liste');
     }
+    /**
+     * @Route("/Deconnexion",name="logout_accout")
+     * @Route("/Quit")
+     * @return Response
+     */
+    public function logout_account()
+    {
+       return $this->redirectToRoute('login_account'); 
+    }
+
 }
