@@ -33,17 +33,17 @@ class CmdType extends AbstractType
             ->add('quantite',TextType::class, $this->configuration('Qunatité ','Tapez ici la quantité commander'))
             ->add('prixunitaire',TextType::class, $this->configuration(' Prix Unitaire','Le prix unitaire '))
             ->add('datecmd',DateType::class,$this->configuration(' Date du commande','date '))
-            ->add('clientcmd', TextType::class,$this->configuration('Client',' Nom du client'));
-            // ->add('clientcmd', EntityType::class,[
-            //     'class' => Client::class,
-            //     'label' => ' N° Facture',
-            //     'placeholder' => 'Veuillez sélectionner',
-            //     'query_builder'=>function(ClientRepository $Client){
-            //         // return $client->createQueryBuilder('f')->select('f.nomcl')->orderBy('f.id');
-            //         return $Client->createQueryBuilder('f')->select('f.nomcl');
-            //     // 'query_builder'=>function(ClientRepository $Client){
-            //     //     return $client->createQueryBuilder('f')->select('f.id') ->orderBy('f.id','ASC');
-            // }]);
+            // ->add('clientcmd', TextType::class,$this->configuration('Client',' Nom du client'));
+            ->add('clientcmd', EntityType::class,[
+                'class' => Client::class,
+                'label' => ' N° Facture',
+                'placeholder' => 'Veuillez sélectionner',
+                'query_builder'=>function(ClientRepository $Client){
+                    // return $client->createQueryBuilder('f')->select('f.nomcl')->orderBy('f.id');
+                    return $Client->createQueryBuilder('f')->select('f.nomcl')->orderBy('f.id','ASC');
+                // 'query_builder'=>function(ClientRepository $Client){
+                //     return $client->createQueryBuilder('f')->select('f.id') ->orderBy('f.id','ASC');
+            }]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Controller\client as ControllerClient;
 use App\Entity\Cmd;
 use App\Form\CmdType;
 use App\Entity\Client;
@@ -67,8 +68,9 @@ class Accueil extends AbstractController{
      * @Route("/Commande")
      * @Route("/Ncommande")
      */
-    public function new_cmd(Request $rqt){
-        $cmd = new Cmd() ;
+    public function new_cmd(Request $rqt)
+    {
+        $cmd = new Cmd();
         $form = $this -> createForm(CmdType::class,$cmd);
         $form->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
