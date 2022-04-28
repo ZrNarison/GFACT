@@ -55,9 +55,13 @@ class Accueil extends AbstractController{
         if($form->isSubmitted()){
             $manager = $this -> getDoctrine()->getManager();
             $manager -> persist($client);
-            $manager -> flush();
-            
+            $manager -> flush(); 
+            $this->addFlash(
+                "success",
+                "Le client N° <strong> {$client->getId()}</strong> dont son nom est <strong>  {$client->getnomcl()} </strong> à été bien enregistré !"
+            );
             return $this->redirectToRoute('Commande');
+           
         }
         return $this->render("Adcm.html.twig",[
             'form'=> $form->createView()
@@ -70,11 +74,11 @@ class Accueil extends AbstractController{
      */
     public function new_cmd(Request $rqt)
     {
+        $client= new Client();
         $cmd = new Cmd();
         $form = $this -> createForm(CmdType::class,$cmd);
         $form->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
-            // dd($form->getData());
             $mng = $this -> getDoctrine()->getManager();
             $mng -> persist($cmd);
             $mng -> flush();

@@ -54,7 +54,7 @@ class Cmd
      */
     private $clientcmd;
     
-    // public function __construct(Client $nomcl)
+    // public function __construct(Client $Client)
     // {
     //      $this->Client=$Client;
     // }

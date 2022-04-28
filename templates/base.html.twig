@@ -18,6 +18,15 @@
     </head>
     <body>
     {% include 'complement/header.html.twig' %}
+        {% for label, message in app.flashes %}
+            <div class="container text-center">
+                <div class="alert alert-{{label}}">
+                {% for message in message %}
+                    <p>{{message|raw}}</p>
+                {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
         {% block body %}
         {% endblock %}        
     </body>

@@ -16,8 +16,5 @@ $(document).ready(function(){
 	   }else{
 		  psw.attr("type","password");
 	   }
-	}),
-	$(document).ready(function(){
-	   
 	})
- });
+});
