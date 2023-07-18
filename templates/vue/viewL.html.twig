@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="container">
+    <h1 class="my-3 text-center">Liste des toutes le client</h1>
+    <div class="container row">
+        <div class="d-block row">
+            <div class="float-start">
+                <div class="float-start">eto ny liste deroulante</div>
+                <a href="{{path('Commande')}}"><i class="fa-sharp fa-solid fa-newspaper float-end"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="container row mt-5 float-none">
+        {% if client | length > 0 %}
+            <table class="table table-striped table table-hover bg-primary">
+                <thead class="text-white text-uppercase">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Adress</th>
+                        <th>Telephone</th>
+                    </tr>
+                </thead>
+                {% for l in client %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td>{{l.NomCl|upper}}</td>
+                        <td>{{l.Adress|upper}}</td>
+                        <td>{{l.Tel}}</td>
+                        <td>
+                            <a href="{{path('edit_client',{'NomCl':l.id})}}" class="btn btn-sm"><i class="fa-sharp fa-solid fa-user-pen"></i></a>
+                            <a onclick="return confirm('Etes vous sur de supprimer {{l.NomCl|upper}}?')"href="{{path('del_client',{'id':l.id})}}" class="btn btn-sm fas fa-trash"></a>
+                        <td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="h1"><em>Aucun client enregistré</em></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

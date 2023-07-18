@@ -1,0 +1,52 @@
+{% set ap = app.user %}
+{% if ap %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary navbar-responsive sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{path('home')}}"><strong>G-FACT</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>        
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item" id="acc">
+                        <a class="nav-link active" href="{{path('home')}}"><i class="fa-solid fa-house"></i>Acceuil</a>
+                    </li>
+                    <li class="nav-item dropdown" >
+                        <a href="#" class="nav-link dropdown-toggle"id="factureDropdownlink" data-bs-toggle="dropdown"><i class="fa-solid fa-cart-plus"></i>Facturation</a>
+                        <div class="dropdown-menu dropdown-menu" aria-labelledby="factureDropdownlink1">
+                            <a class="dropdown-item dropdown-toggle float-start" data-bs-toggle="dropdown" id="newDropdownlink" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-sharp fa-solid fa-newspaper"></i>Nouveau</a>
+                                <div class="dropdown-menu submenu float-end ml-auto col-lg-auto" aria-labelledby="newDropdownlink" id="new">
+                                    <a class="dropdown-item" href="{{path('Nouveau')}}">Client</a>
+                                    <a class="dropdown-item" href="{{path('Commande')}}">Commande</a>
+                                    <a class="dropdown-item" href="{{path('ncompte')}}">Utilisateur</a>
+                                </div>
+                            <a class="dropdown-item dropdown-toggle float-start" data-bs-toggle="dropdown" id="listDropdownlink" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-sharp fa-solid fa-list"></i>Liste</a>
+                                <div class="dropdown-menu submenu float-end ml-auto col-lg-auto" aria-labelledby="listDropdownlink" id="list">
+                                    <a class="dropdown-item" href="{{path('Liste_client')}}">Client</a>
+                                    <a class="dropdown-item" href="{{path('Liste_cmd')}}">Commande</a>
+                                    <a class="dropdown-item" href="{{path('Liste_user')}}">Utilisateur</a>
+                                </div>
+                        </div>
+                    </li>
+                    <li class="nav-item" id="param">
+                        <a class="nav-link" href="{{path('set')}}"><i class="fa-solid fa-gears"></i>Paramettre</a>
+                    </li>
+                </ul>
+                <ul class="float-end navbar-nav ml-auto col-lg-auto" >
+                    <div class="btn-group" id="dma">
+                        <li type="button" class="nav-link dropdown-toggle btn  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="/img/user/{{ap.picture}}" class="rounded">
+                            {{ap.pseudo|upper}}
+                        </li>
+                        <ul class="dropdown-menu dropdown-menu" aria-labelledby="dm">
+                            <li><a class="dropdown-item" href="{{path('edit_user')}}">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{{path('editpass')}}">Mot de pass</a></li>
+                            <li><a class="dropdown-item" href="{{path('portfolio')}}">A propos</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{path('logout_accout')}}">Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endif %}

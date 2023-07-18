@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ include ('complement/head.html.twig' )}}
+    <a href="{{path('pfolio')}}" class="btn btn-success"><img src="/img/Z-logosgreen.png" class="float-start"><p class="fs-1 float-start" id="zg"></p>{{'-Dev'}}</a>
+{% endblock %}
+{% block footer %}
+<div class="float-end">
+    {% include('complement/footer.html.twig') %}
+</div> 
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class=" container text-center" id="liste">
+        {% if parm | length > 0 %}
+            <table class="table table-striped table table-hover bg-success">
+                <thead class="text-white text-uppercase">
+                    <tr>
+                        <th>Station</th>
+                        <th>Fréquence</th>
+                        <th>Localisation</th>
+                        <th>B.P</th>
+                        <th>E-mail</th>
+                        <th>téléphone</th>
+                        <th>STAT</th>
+                        <th>NIF</th>
+                        <th>Compte Bancaire</th>
+                        <th>TP</th>
+                        <th>Logos</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                {% for p in parm %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td>{{p.std}}</td>
+                        <td>{{p.frq}} MhZ</td>
+                        <td>{{p.padres}}</td>
+                        <td>{{p.bp}}</td>
+                        <td>{{p.mail}}</td>
+                        <td>{{p.Telp}}</td>
+                        <td>{{p.pstat}}</td>
+                        <td>{{p.pnif}}</td>
+                        <td>{{p.prib}}</td>
+                        <td>{{p.tp}}</td>
+                        <td>{{p.tp}}</td>
+                        <td>
+                            <a href="{{path('params',{'parm':p.pslug})}}" class="btn btn-sm">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </a>
+                        <td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+    {% else %}
+        <p class="h1"><em>Aucune renseignement enregistré</em></p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+{% endblock %}
+{% block body %}
+    <div class="fs-2">
+        {% include('complement/cplm.html.twig') %}
+    </div>
+    <div class="container">
+    <p class="fs-1">{{dev.title|upper}} {{dev.version}}</p>
+        <div class="mx-auto fluid">
+            <img src="/img/dev/{{dev.fichiers}}" class="img-fluid rounded"  id="mydev">
+        </div>
+        <p class="fs-4">{{dev.description}}</p>
+        <p class="float-end"><a href="{{path('pfolio')}}" class="btn btn-primary">{{'Retour'}}</a></p>
+    </div>
+{% endblock %}
