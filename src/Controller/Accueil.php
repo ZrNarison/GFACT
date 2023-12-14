@@ -124,7 +124,7 @@ class Accueil extends AbstractController{
                             ->setCClient($cc)
                             ->setDos($ds)
                             ->setDif($df)
-                            ->setDateCmdClient($dateclient)                           
+                            // ->setDateCmdClient($dateclient)                           
                             ->setClSlug($newslug)                           
                             ;
                 $manager->persist($clientCmd);
@@ -159,8 +159,13 @@ class Accueil extends AbstractController{
             $slugify = new Slugify();
             $clcmmc= $form->get('cmdClient')->getData();
             $cmdslug=$clcmmc."-".$date->Format("d-m-Y");
+            $Annees=$date->Format("Y");
+            $Mois=$date->Format("m-Y");
             $mng = $this -> getDoctrine()->getManager();
-            $cmd->setCmdsulg($cmdslug);
+            $cmd->setDateCmd($date)
+                ->setAnnees($Annees)
+                ->setCmSlug($cmdslug)
+                ->setMois($Mois);
             $mng -> persist($cmd);
             $clcmmc->addCmd($cmd);
             $mng -> flush();           
@@ -585,6 +590,7 @@ class Accueil extends AbstractController{
      * @Route("/Ad/new_compte", name="ncompte")
      * @Route("/Ad/newcompte")
      * @Route("/Ad/ncompte")
+     * @Security("is_granted('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
      * @return response
      */
     public function ncompte(Request $rqt,UserPasswordEncoderInterface $encoder)

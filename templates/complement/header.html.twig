@@ -1,13 +1,13 @@
 {% set ap = app.user %}
 {% if ap %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-secondar navbar-responsive sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondar navbar-responsive sticky-top" id="barmenu">
         <div class="container-fluid">
             <div class ="float-start col-1">
                 <div class ="float-start mb-0">
                     <a class="navbar-brand fs-4 text-danger fw-bold" href="{{path('home')}}" id="container">
-                        <div class="h-clock float-start ">12:</div>
-                        <div class="m-clock float-start">36</div>
-                        <div class="s-clock float-start">02</div>
+                        <div class="h-clock float-start " id="h-clock">12</div>
+                        <div class="m-clock float-start" id="m-clock">36</div>
+                        <div class="s-clock float-start" id="s-clock">02</div>
                     </a>
                 </div>
             </div>

@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use Date;
 use Cocur\Slugify\Slugify;
-use App\Repository\CmdRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CmdRepository;
 
 /**
  * @ORM\Entity(repositoryClass=CmdRepository::class)
@@ -70,19 +71,6 @@ class Cmd
      */
     private $Mois;
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     * Undocumented function
-     *
-     * @return integer|null
-     */
-    public function initializeSlug(){
-        if(empty($this->CmSlug)){
-            $slugify= new Slugify();
-            $this->CmSlug = $slugify->Slugify($this->Design .'-'.  $this->Qte.'-'.  $this->Pu .'-'.  $this->prd .'-'.  $this->duree);
-        }
-    }
     public function getId(): ?int
     {
         return $this->id;
