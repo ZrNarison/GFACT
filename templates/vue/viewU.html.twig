@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% set ap = app.user %}
+<div class="container mt-3">
+    <p class="my-3 text-center text-white fs-3">Liste d'utilisateurs</p>
+    <div class="container row align-center">
+        {% if user | length > 0 %}
+            <table class="table table-striped table table-hover bg-success">
+                <thead class="text-white text-uppercase">
+                    <tr>
+                        <th class="col-6">Nom</th>
+                        <th class="col-6">Photo</th>
+                    {% for roles in ap.userRoles %}
+                    {% if roles|upper == "ROLE_SUPERADMIN" %}
+                        <th class="text-danger text-uppercase fs-5">Action</th>
+                    {% endif %}
+                    {% endfor %}
+                    </tr>
+                </thead>
+                {% for l in user %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td>{{l.pseudo}}</td>
+                        <td><img src="/img/user/{{l.picture}}" class="rounded"></td>
+                        {% for roles in ap.userRoles %}
+                            {% if roles|upper == "ROLE_SUPERADMIN" %}
+                            <td>
+                            <a href="{{path('edit_user')}}" class="btn btn-sm">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </a>
+                        
+                            <a href="{{path('del_user',{'id':l.id})}}" class="btn btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        {% endif %}
+                        {% endfor %}
+                        <td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+    {% else %}
+        <p class="h1 text-danger text-center"><em>Aucune Utilisateur enregistré</em></p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

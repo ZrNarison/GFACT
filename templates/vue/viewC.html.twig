@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% set ap = app.user %}
+<div class="container mt-3">
+    <p class="my-3 text-center text-white fs-3">Liste des toutes les commande</p>
+    <div class="row float-none col-12">
+        <div class="jumbotron">
+            <div class="container col-12">
+                <div class="row mb-2">
+                    <div class="float-start">
+                        {{form_start(form)}}
+                            <div class="float-start col-6">
+                                <div class="col-8">
+                                    {{form_row(form.NomClient)}}
+                                </div>
+                            </div>
+                            <div class="float-start col-3">
+                                <div class="col-7">
+                                    {{form_row(form.DateCmd)}}
+                                </div>
+                            </div>
+                            <div class="float-start col-lg-2 col-sm-2">
+                                <button type="submit" class="btn btn-outline-secondary" id="search">Rechercher</button>
+                            </div>
+                        {{form_end(form)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% if cmd | length > 0 %}
+        <div class="float-start col-11">
+            <table class="table table-striped table table-hover bg-success tb">
+                <thead class="text-white text-uppercase">
+                    <tr>
+                        <th>N°</th>
+                        <th>Désignation</th>
+                        <th>Période</th>
+                        <th>Durée</th>
+                        <th class="text-end">Quantité</th>
+                        <th class="text-end">Prix unitaire</th>
+                        <th class="text-end">Montant</th>
+                    {% for roles in ap.userRoles %}
+                        {% if roles|upper == "ROLE_USER" %}
+                        <th class="text-center">Action</th>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                </thead>
+                {% for c in cmd %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td>{{c.id}}</td>
+                        <td>{{c.Design}}</td>
+                        <td>{{c.prd}}</td>
+                        <td>{{c.duree}}</td>
+                        <td class="text-end">{{c.qte}}</td>
+                        <td class="text-end">{{c.pu|number_format(0, ',', ' ')}}</td>
+                        <td class="text-end">{{(c.qte * c.pu)|number_format(0, ',', ' ')}}</td>
+                        <td class="">
+                        {% for roles in ap.userRoles %}
+                        {% if roles|upper == "ROLE_USER" %}
+                            <a href="{{path('editcommande',{'CmSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.id})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                        <td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+        <div class="float-end col-1">
+        {% for roles in ap.userRoles %}
+        {% if roles|upper == "ROLE_USER" %}
+            <div class="float-end">
+                <a href="{{path('Commande')}}"><i class="fs-6 fa-sharp  fa-solid fa-newspaper"></i></a>
+            </div>
+        {% endif %}
+        {% endfor %}
+        {% if nom | length > 0  and datecmd | length >0 %}
+            <div class="float-end col-10">
+                <div class="float-end">
+                    <a href="{{path('pnt_fact',{'slug':OneCmd.CmSlug})}}"><i class="fas fa-print mt-3" id="fact"></i></a>
+                </div>
+                <div class="float-end col-12">
+                    <div class="float-end">    
+                        <a href="{{path('recapmens',{'slug':moisdate})}}"><i class="fas fa-print mt-3 mb-3" id="mens"></i></a>
+                    </div>
+                    <div class="float-end col-12 text-end">
+                        <a href="{{path('recapannu',{'slug':anneesdate})}}"><i class="fas fa-print" id="annu"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    {% else %}
+        <p class="h1 text-danger text-center"><em>Aucun commande ajouté</em></p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+    {% for d in dev %}
+    <div class="container-fluid float-start col-md-2">
+        <div class="jumbotron mt-3">
+            <h1 class="display-4 text-uppercase">{{d.title|u.truncate(8,'...')}}</h1>
+            <div class="mx-auto fluid">
+                <img src="/dev/user/{{d.fichiers}}" class="img-fluid rounded"  id="mydev">
+            </div>
+                <p class="text-uppercase lead">{{d.title}} {{d.version}}</p>                    
+                <p class="float-center">{{d.description}}</p>                    
+                <p class="float-start"><a href="#" class="btn btn-outline-primary">{{'En savoir plus'|u.truncate(12,'...')}}</a></p>
+        </div>
+    </div>
+    {% endfor %}

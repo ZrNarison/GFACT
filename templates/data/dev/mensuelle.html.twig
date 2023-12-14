@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" lang="Fr-fr">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}FACTURE{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <style>
+         body{
+            /*border:1px solid red;*/
+            margin-top:1px;
+            margin-bottom:2px;
+        }
+        .body{
+            margin-top:200%;
+            margin-bottom:2px;
+        }
+        .ud{text-decoration:underline}
+        .d-block{display:block}
+        .d-iblock{display:inline-block}
+        .header,.body,{
+            margin-top:0px;
+            margin-bottom:0px;
+            margin-left:0px;
+            margin-right:0px;
+            /*border:1px solid green*/
+        }
+        footer{
+            margin-top: -1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875em;
+  color: #6c757d;
+
+        }
+        .collapse{
+            border:1px solid black
+        }
+        .mt{margin-top:0%}
+        .success{color:green}
+        .danger{color:red}
+        .ml{margin-left:50%;margin-right:0%}
+        .card{margin-left:0%;}
+        .col-lg-4{margin-left:2%;margin-right:0%}
+        .col-lg-4x{margin-left:70%;margin-right:0%}
+        .col-lg-12{margin-left:20%;margin-right:10%}
+        .col-lg-12x{margin-left:8%;margin-right:15%}
+        .col-4{margin-left:0%;margin-right:65%}
+        .col-4x{margin-left:0%;margin-right:100%}
+        .col-12{margin-left:0%;margin-right:0%}
+        .float-start{float:left}
+        .float-end{float:right}
+        .float-none{float:none; display:block}
+        .text-center{text-align:center}
+        .text-left{text-align:left}
+        .spacer{margin-left:0%;margin-right:23%}
+        b,strong {font-weight: bolder;}
+table{border-collapse:collapse}
+th,td{border:1px solid black}
+        .container{float:left}
+        .float-start {
+  float: left !important;
+}
+
+.float-end {
+  float: right !important;
+}
+
+.float-none {
+  float: none !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.fs-1 {
+  font-size: calc(1.375rem + 1.5vw) !important;
+}
+
+.fs-2 {
+  font-size: calc(1.325rem + 0.9vw) !important;
+}
+
+.fs-3 {
+  font-size: calc(1.3rem + 0.6vw) !important;
+}
+
+.fs-4 {
+  font-size: calc(1.275rem + 0.3vw) !important;
+}
+
+.fs-5 {
+  font-size: 1.25rem !important;
+}
+
+.fs-6 {
+  font-size: 1rem !important;
+}
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: 0.25rem !important;
+}
+
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mt-auto {
+  margin-top: auto !important;
+}
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.col-1 {
+  flex: 0 0 auto;
+  width: 8.33333333%;
+}
+
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66666667%;
+}
+
+.col-3 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+.col-4 {
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+
+.col-5 {
+  flex: 0 0 auto;
+  width: 41.66666667%;
+}
+
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.col-7 {
+  flex: 0 0 auto;
+  width: 58.33333333%;
+}
+
+.col-8 {
+  flex: 0 0 auto;
+  width: 66.66666667%;
+}
+
+.col-9 {
+  flex: 0 0 auto;
+  width: 75%;
+}
+
+.col-10 {
+  flex: 0 0 auto;
+  width: 83.33333333%;
+}
+
+.col-11 {
+  flex: 0 0 auto;
+  width: 91.66666667%;
+}
+
+.col-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+        img{
+            width:50px;height:50px
+        }
+        .up{text-transform: uppercase;} 
+        </style>
+        {% block javascript %}{% endblock %}
+    </head>
+    <body>
+    {% block body %}
+    <div class="float-none ">
+        <div>
+        {% for p in param %}
+            <div class="mb-2">
+                <img src="{{p.Logos}}" class="mtb-1"/>
+                <p class="mb-0 mt-0">{{p.Std}}</p>
+                <p class="mb-0 mt-0">FM {{p.Frq}}MhZ</p>
+                <p class="mb-0 mt-0">Adresse {{p.PAdres}}</p>
+                <p class="mb-0 mt-0">Boite Postale: {{p.Bp}}</p>
+                <p class="mb-0 mt-0">Email {{p.Mail}}</p>
+                <p class="mb-0 mt-0">Télephone {{p.Telp}}</p>
+                <p class="mb-0 mt-0">NIF N° {{p.PNif}}</p>
+                <div class="float-none mb-5">
+                    <div class="float-start">
+                        <p class="mb-0 mt-0">STAT N° {{p.PStat}}</p>
+                        <p class="mb-0 mt-0">Compte Bancaire: {{p.PRib}}</p>
+                        <p class="mb-0 mt-0">TP {{p.Tp}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mt-5">
+    <p class="mt-5 col-9 text-center up">recaputilation mensuelle </p>
+        <table class="text-center col-12 tb ">
+            <thead class="up">
+                <tr >
+                    <th>Mois</th>
+                    <th>Désignation</th>
+                    <th>Période</th>
+                    <th>Durée</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Montant</th>
+                </tr>      
+            </thead>
+            {% for c in cmd %}
+            <tbody class="bg-white">
+                <tr class="tb">
+                    <td class="col-1 text-left">{{c.Mois}}</td>
+                    <td class="text-left">{{c.Design}}</td>
+                    <td>{{c.prd}}</td>
+                    <td>{{c.duree}}</td>
+                    <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
+                    <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
+                    <td class="text-end">{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
+                </tr>
+            </tbody>
+            {% endfor %} 
+        </table>
+    </div>
+   <div class="float-start">
+    <div class="d-block ">
+            <div class="col-12">
+                <strong><p class="up float-end col-1">total VALINY</p></strong>
+            </div>
+            <div class="col-12">
+                <p>Arrêtée la présente facture à la somme de :.....Ariary( Ar)</p>
+            </div>
+            <div class="col-12">
+                <p class="float-end ud">Le Directeur</p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    </body>
+</html>

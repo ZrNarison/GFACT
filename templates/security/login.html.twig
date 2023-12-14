@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}G-FACT{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="/build/css/app.css"/>
+        {% block stylesheets %}
+        {% endblock %}
+        <script type="text/javascript" src="/build/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/build/js/popper.min.js"></script>
+        <script type="text/javascript" src="/build/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="/build/js/validate.js"></script>
+        <script type="text/javascript" src="/build/js/app.js"></script>
+        {% block javascript %}{% endblock %}
+    </head>
+{% block body %}
+<div class="container spacer card rounded col-md-4 col-xs-12 col-md-offset-3 rounded"  id="login">
+	<div class="panel-heading panel-body">
+		<div class="panel-primary mt-5 text-center text-white text-bold fs-3 text-uppercase">gestion de facture</div>
+			<div class="panel-body col-md-12 mb-2 container">
+			<form action="{{path('login_access')}}" method="POST" id="formlogin">
+				{% if err %}
+					<div class="alert alert-danger text-center mt-5 h3">Une erreur est survenue, le nom d'utilisateur ou mot de passe est invalide !</div>
+				{% endif %}
+				<div class="panel-body mb-4" id="panel-body">
+					<div class="form-group">
+						<label class="control-label text-white">Utilisateur :</label>
+						<input type="text" name="_username" id="pseudologin" class="form-control text-center" placeholder="Entre le nom d'utilisateur" value="{{uti}}" />
+					</div>
+					<div class="form-group">
+						<label class="control-label text-white">Mot de pass</label>
+						<input type="password" name="_password" id="passwordlogin" class="form-control text-center" placeholder="Tapez ici vos mot de pass" />
+						<i class="fa-solid fa-eye float-end" id="logineye"></i>
+					</div>
+						<a href="" class="text-white nav">Mot de pass oublier ?</b></a>
+					<div  class="form-group">
+						<button  id="btn-action" class="btn btn-outline-success mb-3 mt-4 col-lg-4" name="button" background-color="blue">Se Connecter</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="float-end text-white mt-5 col-2">
+{% include('complement/footer.html.twig') %}
+</div>  
+{% endblock %}

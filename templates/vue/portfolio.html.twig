@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="text-secondary container ">
+    {{ include ('complement/devhead.html.twig' )}}
+    <div class="container">
+        {{ include ('data/dev/devdata.html.twig' )}}
+    </div>       
+</div>       
+{% endblock %}
+{% block footer %}
+<div class="float-end">
+    {% include('complement/footer.html.twig') %}
+</div> 
+{% endblock %}

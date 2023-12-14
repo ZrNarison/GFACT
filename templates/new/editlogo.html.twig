@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block head %}{% endblock  %}
+{% block body %}
+{% form_theme form _self  %}
+<div class="container spacer card col-md-4 col-md-offset-3 mt-4">
+    <div class="row">
+        <div class="panel-primary bg-secondary fs-2 text-center">Modifier logo {{param.Std|upper}}</div>
+        <div class="float-end mt-2" id="editlogos">
+            <div class="float-start">
+                <div class="form-group">
+                    <label class="control-label">Station: {{param.Std|upper}}</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Fréquence: {{param.Frq|number_format(2,"."," ")}}Mhz FM</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label ">Adress: {{param.padres|upper}}</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-lowercase">Email:{{param.mail}}</label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Contact: {{param.Telp}}</label>
+                </div>
+            </div>
+            <div class="float-end form-group">
+                <img src="/img/paramettre/{{param.logos}}" class="rounded">
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="form-group mt-3">
+            {{ include ('data/data.html.twig', {form: form,button:('Valider')} )}}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

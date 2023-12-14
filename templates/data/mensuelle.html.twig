@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" lang="Fr-fr">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}FACTURE{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <style>
+         body{
+            /*border:1px solid red;*/
+            margin-top:1px;
+            margin-bottom:2px;
+        }
+        .body{
+            margin-top:200%;
+            margin-bottom:2px;
+        }
+        .ud{text-decoration:underline}
+        .d-block{display:block}
+        .d-iblock{display:inline-block}
+        .header,.body,.footer{
+            margin-top:0px;
+            margin-bottom:0px;
+            margin-left:0px;
+            margin-right:0px;
+            /*border:1px solid green*/
+        }
+        .col-1 {
+  flex: 0 0 auto;
+  width: 8.33333333%;
+}
+
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66666667%;
+}
+
+        .collapse{
+            border:1px solid black
+        }
+        .mt{margin-top:0%}
+        .success{color:green}
+        .danger{color:red}
+        .ml{margin-left:50%;margin-right:0%}
+        .card{margin-left:0%;}
+        .col-lg-4{margin-left:2%;margin-right:0%}
+        .col-lg-4x{margin-left:70%;margin-right:0%}
+        .col-lg-12{margin-left:20%;margin-right:10%}
+        .col-lg-12x{margin-left:8%;margin-right:15%}
+        .col-4{margin-left:0%;margin-right:65%}
+        .col-4x{margin-left:0%;margin-right:100%}
+        .col-12{margin-left:0%;margin-right:0%}
+        .float-start{float:left}
+        .float-end{float:right}
+        .float-none{float:none; display:block}
+        .text-center{text-align:center}
+        .text-left{text-align:left}
+        .spacer{margin-left:0%;margin-right:23%}
+        .tb{border:1px solid black;border-collapse:collapse;}
+        table{border-collapse: collapse;}
+        th,td{border: 1px solid black;}
+        .container{float:left}
+        .mt-3{margin-top:18px}
+        .mtb-1{margin-top:1px;margin-bottom:1px}
+        .mt-2{margin-top:5px}
+        .mt-3{margin-top:18px}
+        .mt-3{margin-top:18px}
+        .mt-3{margin-top:18px}
+        .mtm-3{margin-top:-180px}
+        .mt-4x{margin-top:15%}
+        .mt-4{margin-top:10%}
+        .mt-5{margin-top:25%}
+        .mt-6{margin-top:75%}
+        .mb-3{margin-top:18px}
+        .mb-4x{margin-top:15%}
+        .mb-4{margin-top:10%}
+        .mb-5{margin-top:25%}
+        .mb-6{margin-top:27%}
+        .ml-1{margin-left:60%}
+        .ml-1x{margin-left:70%}
+        .ml-2{margin-left:95%}
+        .ml-2x{margin-left:75%}
+        .ml-3{margin-left:100%}
+        .mr-2x{margin-right:100%}
+        .mr-2{margin-right:75%}
+        .mr-1{margin-right:25%}
+        .w{width:100%}
+        .h{height:6%}
+        .up{text-transform: uppercase;} 
+        img{
+            width:50px;height:50px
+        }
+        {# .ft{margin-bottom:50%;margin-top:1%} #}
+        </style>
+        {% block javascript %}{% endblock %}
+    </head>
+    <body>
+    {% block body %}
+    <div class="float-none ">
+        <div>
+        {% for p in param %}
+            <div class="mb-2">
+                <img src="/img/paramettre/{{p.logos}}" class="mtb-1"/>
+                <p class="mtb-1">{{p.Std}}</p>
+                <p class="mtb-1">FM {{p.Frq}}MhZ</p>
+                <p class="mtb-1">Adresse {{p.PAdres}}</p>
+                <p class="mtb-1">Boite Postale: {{p.Bp}}</p>
+                <p class="mtb-1">Email {{p.Mail}}</p>
+                <p class="mtb-1">Télephone {{p.Telp}}</p>
+                <p class="mtb-1">NIF N° {{p.PNif}}</p>
+                <div class="float-none">
+                    <div class="float-start">
+                        <p class="mtb-1">STAT N° {{p.PStat}}</p>
+                        <p class="mtb-1">Compte Bancaire: {{p.PRib}}</p>
+                        <p class="mtb-1">TP {{p.Tp}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="float-none mt-4 text-center">
+    <p class="mtb-1 text-center up">recaputilation annuelle</p>
+        <table class="text-center col-12 tb ">
+            <thead class="up">
+                <tr >
+                    <th>Mois</th>
+                    <th>Désignation</th>
+                    <th>Période</th>
+                    <th>Durée</th>
+                    <th>Qté</th>
+                    <th>Prix unitaire</th>
+                    <th>Montant</th>
+                </tr>      
+            </thead>
+            {% for c in cmd %}
+            <tbody class="bg-white">
+                <tr class="tb">
+                    <td class="col-1">{{c.Mois}}</td>
+                    <td class="text-left">{{c.Design}}</td>
+                    <td>{{c.prd}}</td>
+                    <td>{{c.duree}}</td>
+                    <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
+                    <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
+                    <td class="text-end">{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
+                </tr>
+            </tbody>
+            {% endfor %} 
+        </table>
+    </div>
+   <div class="d-block">
+        <div class="d-block">
+            <strong><p class="up mtb-1 ml-1x">total VALINY</p></strong>
+        </div>
+        <div class="d-block">
+            <p>Arrêtée la présente facture à la somme de :.....Ariary( Ar)</p>
+        </div>
+        <div class="d-block">
+            <p class="ml-2x ud">Le Directeur</p>
+        </div>
+    </div>
+    {% endblock %}     
+    </body>
+</html>

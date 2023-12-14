@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{% set ap = app.user %}
+<div class="container mt-3">
+    <p class="my-3 text-center text-white fs-3">Liste des toutes le client</p>
+    <div class="container row float-none">
+        {% if client | length > 0 %}
+            <table class="table table-striped table table-hover bg-success">
+                <thead class="text-white text-uppercase">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Adress</th>
+                        <th>Telephone</th>
+                        <th>Client</th>
+                    {% for roles in ap.userRoles %}
+                    {% if roles|upper == "ROLE_USER" %}
+                        <th class="text-danger text-uppercase fs-5">Action</th>
+                    {% endif %}
+                    {% endfor %}
+                    </tr>
+                </thead>
+                {# <td>{{client.Cmd.Design|upper}}</td> #}
+                {% for l in client %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td>{{l.Clients.NomCl|upper}}</td>
+                        <td>{{l.Clients.Adress|upper}}</td>
+                        <td>{{l.Clients.Tel}}</td>
+                        <td>{{l.ClSlug|upper}}</td>
+                        <td class="col-lg-auto">
+                        {% for roles in ap.userRoles %}
+                        {% if roles|upper == "ROLE_USER" %}
+                            <a href="{{path('editclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm"><i class="fa fa-user-o"></i></a>
+                            <a href="{{path('editcclient',{'slug':l.ClSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{l.Clients.NomCl|upper}} ?')" href="{{path('delclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                        {% endfor %}
+                        <td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="h1 text-danger text-center"><em>Aucun client enregistré</em></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

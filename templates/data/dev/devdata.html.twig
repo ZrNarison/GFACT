@@ -1,0 +1,14 @@
+    {% for d in dev %}
+    <div class="container-fluid float-start col-md-2">
+        <div class="jumbotron mt-3">
+            <h1 class="display-6 text-uppercase">{{d.title|u.truncate(20,'...')}}</h1>
+            <div class="mx-auto fluid">
+                <img src="/img/dev/{{d.fichiers}}" class="img-fluid rounded"  id="mydev">
+            </div>
+                <p class="text-uppercase lead">{{d.title}} {{d.version}}</p>                    
+                <p class="float-center">{{d.description}}</p>                    
+                <p class="float-start"><a href="{{path('vue_dev',{'mo':d.slug})}}" class="btn btn-outline-primary">{{'En savoir plus'|u.truncate(15,'...')}}</a></p>
+        </div>
+    </div>
+    {% endfor %}
+    

@@ -1,0 +1,3 @@
+Accueil:
+  path: /
+  controller: App\Controller\Accueil::index

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" lang="Fr-fr">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}FACTURE{% endblock %}</title>
+        {# <script src="{{ asset('js/convert.js') }}"></script> #}
+        {% block stylesheets %}{% endblock %}
+        {% block javascript %}
+        {% endblock %}
+    </head>
+    <body>
+    {% block body %}
+        <div class="float-none mb-5">
+            {% for p in param %}
+                <div class="mb-4">
+                    <img src="/img/paramettre/{{p.Logos}}" class="mb-1"/>
+                    <p class="mt-0 mb-0">{{p.Std}}</p>
+                    <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
+                    <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
+                    <p class="mt-0 mb-0">Boite Postale: {{p.Bp}}</p>
+                    <p class="mt-0 mb-0">Email {{p.Mail}}</p>
+                    <p class="mt-0 mb-0">Télephone {{p.Telp}}</p>
+                    <p class="mt-0 mb-0">NIF N° {{p.PNif}}</p>
+                    <div class="float-none col-12">
+                        <div class="float-start col-8">
+                            <p class="mt-0 mb-0">STAT N° {{p.PStat}}</p>
+                            <p class="mt-0 mb-0">Compte Bancaire: {{p.PRib}}</p>
+                            <p class="mt-0 mb-0">TP {{p.Tp}}</p>
+                        </div>
+                        <div class="float-start mt-2">
+                            {% if clcm.CClient | length > 0   %}
+                              <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
+                              <p class="mt-0 mb-0">B.C: {{client.CClient|upper}}</p>
+                            {% elseif clcm.Dos | length > 0 %}
+                              <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
+                              <p class="mt-0 mb-0">B.C: {{client.CClient|upper}}</p>
+                              <p class="mt-0 mb-0">N° Diffision: {{client.Dif}}</p>
+                            {% else %} 
+                              <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
+                              <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="float-none mt-5 text-center">
+            <p class="mt-3 mb-0 col-12 text-center">FACTURE N°: </p>
+            <table class="text-center col-12">
+                <thead class="up">
+                    <tr >
+                        <th>Désignation</th>
+                        <th>Période</th>
+                        <th>Durée</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>Montant</th>
+                    </tr>      
+                </thead>
+                {% for c in cmd %}
+                <tbody class="bg-white">
+                    <tr>
+                        <td class="text-left">{{c.design}}</td>
+                        <td>{{c.prd}}</td>
+                        <td>{{c.duree}}</td>
+                        <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
+                        <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
+                        <td class="text-end" >{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
+                    </tr>
+                </tbody>
+                {% endfor %} 
+            </table>
+        </div>
+        <div class="d-block col-12 mb-2 float-end mb-5">
+            <div class="d-block ">
+                <strong><p class="up mt-0 mb-0 ml-1x">TOTAL {{total|number_format(0,"","")}}</p></strong>
+            </div>
+            <div class="d-block">
+                <p class="mt-1 mb-0" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ({{total|number_format(0,"","")}}Ar)</strong></p>
+            </div>
+            <div class="d-block">
+                <p class="ml-2x ud mb-0 ">Le Directeur</p>
+            </div>
+        </div>
+    {% endblock %}   
+    {% block footer %}   
+        <div class="float-start col-12 mt-5 mb-5 text-center footer">
+            <p class="success mt-5">__________________________________________________________</p>
+            {% for p in param %}
+            <div class="mt-0 mb-0">
+                <p class="up mt-0 mb-0">{{p.FStd}}</p>
+                <p class="mt-0 mb-0" >email: {{p.Mail}}</p>
+                <p class="mt-0 mb-0">Télephone: {{p.Telp}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endblock %}   
+    </body>
+</html>
+<style>
+        .ud{text-decoration:underline}
+        .d-block{display:block}
+        .d-iblock{display:inline-block}
+        .header,.body,.footer{margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px;
+            /*border:1px solid green*/
+        }
+        .collapse{
+            border:1px solid black
+        }
+        .col-1 {
+  flex: 0 0 auto;
+  width: 8.33333333%;
+}
+
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66666667%;
+}
+
+.col-3 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+.col-4 {
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+
+.col-5 {
+  flex: 0 0 auto;
+  width: 41.66666667%;
+}
+
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.col-7 {
+  flex: 0 0 auto;
+  width: 58.33333333%;
+}
+
+.col-8 {
+  flex: 0 0 auto;
+  width: 66.66666667%;
+}
+
+.col-9 {
+  flex: 0 0 auto;
+  width: 75%;
+}
+
+.col-10 {
+  flex: 0 0 auto;
+  width: 83.33333333%;
+}
+
+.col-11 {
+  flex: 0 0 auto;
+  width: 91.66666667%;
+}
+
+.col-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+input{border:none !important}
+
+        .mt{margin-top:0%}
+        .success{color:green}
+        .danger{color:red}
+        .ml{margin-left:50%;margin-right:0%}
+        .card{margin-left:0%;}
+        .col-lg-4{margin-left:2%;margin-right:0%}
+        .col-lg-4x{margin-left:70%;margin-right:0%}
+        .col-lg-12{margin-left:20%;margin-right:10%}
+        .col-lg-12x{margin-left:8%;margin-right:15%}
+        .col-4{margin-left:0%;margin-right:65%}
+        .col-4x{margin-left:0%;margin-right:100%}
+        .col-12{margin-left:0%;margin-right:0%}
+        .float-start{float:left}
+        .float-end{float:right}
+        .float-none{float:none; display:block}
+        .text-center{text-align:center}
+        .text-left{text-align:left}
+        .spacer{margin-left:0%;margin-right:23%}
+        .tb{border:1px solid black;border-collapse:collapse;}
+        table{border-collapse: collapse;}
+        th,td{border: 1px solid black;}
+        .container{float:left}
+        .mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: 0.25rem !important;
+}
+
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mt-auto {
+  margin-top: auto !important;
+}
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem !important;
+}
+.mb-2 {margin-bottom: 0.5rem !important;}
+.mb-3 {margin-bottom: 1rem !important;}
+.mb-4 {margin-bottom: 1.5rem !important;}
+.mb-5 {margin-bottom: 3rem !important;}
+.mb-auto {margin-bottom: auto !important;}
+.tr{border:2px solid red}
+.tg{border:2px solid green}
+.tb{border:2px solid black}
+.ml-1{margin-left:60%}
+.ml-1x{margin-left:70%}
+.ml-2{margin-left:95%}
+.ml-2x{margin-left:75%}
+.ml-3{margin-left:100%}
+.mr-2x{margin-right:100%}
+.mr-2{margin-right:75%}
+.mr-1{margin-right:25%}
+.w{width:100%}
+.h{height:6%}
+.up{text-transform: uppercase;} 
+img{width:50px;height:50px}
+.col-1 {
+  flex: 0 0 auto;
+  width: 8.33333333%;
+}
+
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66666667%;
+}
+
+.col-3 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+.col-4 {
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+
+.col-5 {
+  flex: 0 0 auto;
+  width: 41.66666667%;
+}
+
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.col-7 {
+  flex: 0 0 auto;
+  width: 58.33333333%;
+}
+
+.col-8 {
+  flex: 0 0 auto;
+  width: 66.66666667%;
+}
+
+.col-9 {
+  flex: 0 0 auto;
+  width: 75%;
+}
+
+.col-10 {
+  flex: 0 0 auto;
+  width: 83.33333333%;
+}
+
+.col-11 {
+  flex: 0 0 auto;
+  width: 91.66666667%;
+}
+
+.col-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+ </style>
