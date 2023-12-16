@@ -15,7 +15,7 @@
         <div class="float-none mb-5">
             {% for p in param %}
                 <div class="mb-4">
-                    <img src="/img/paramettre/{{p.Logos}}" class="mb-1"/>
+                    <img src="img/paramettre/{{ p.Logos}}" class="mb-1"/>
                     <p class="mt-0 mb-0">{{p.Std}}</p>
                     <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
                     <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
@@ -75,15 +75,17 @@
         </div>
         <div class="d-block col-12 mb-2 float-end mb-5">
             <div class="d-block ">
-                <strong><p class="up mt-0 mb-0 ml-1x">TOTAL {{total|number_format(0,"","")}}</p></strong>
+                <strong><p class="up mt-0 mb-0 mlx-2">TOTAL {{total|number_format(0,"","")}}</p></strong>
             </div>
-            <div class="d-block">
-                <p class="mt-1 mb-0" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ({{total|number_format(0,"","")}}Ar)</strong></p>
+            <div class="d-block mt-3">
+                <p class="mt-2 mb-0" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0,"","")}}Ar)</strong></p>
             </div>
             <div class="d-block">
                 <p class="ml-2x ud mb-0 ">Le Directeur</p>
             </div>
         </div>
+        <p class="mt-5 mb-5 "></p>
+        {# <p class="mt-5 mb-5 "></p> #}
     {% endblock %}   
     {% block footer %}   
         <div class="float-start col-12 mt-5 mb-5 text-center footer">
@@ -240,7 +242,7 @@ input{border:none !important}
 .ml-2x{margin-left:75%}
 .ml-3{margin-left:100%}
 .mr-2x{margin-right:100%}
-.mr-2{margin-right:75%}
+.mlx-2{margin-left:78%;margin-right:auto}
 .mr-1{margin-right:25%}
 .w{width:100%}
 .h{height:6%}

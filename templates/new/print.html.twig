@@ -10,10 +10,10 @@
       </div>
     </div>
   {{form_end(form)}}
-    <div class="text-dark mb-5 text-dark">
+    <div class="text-dark mb-5 mt-4 text-dark">
       {% for p in param %}
-        <div class="mb-4">
-          <img src="/img/paramettre/{{p.Logos}}" class="mb-1" id="printlogo"/>
+        <div class="mb-4 ">
+          <img src="/img/paramettre/{{p.Logos}}" class="mb-1 mt-2" id="printlogo"/>
           <p class="mt-0 mb-0">{{(p.Std)}}</p>
           <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
           <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
@@ -74,8 +74,8 @@
       <div class="d-block ">
         <strong><p class="up float-end mt-0 mb-0">TOTAL {{total|number_format(0,"","")}}</p></strong>
       </div>
-      <div class="d-block text-dark mt-3 mb-5">
-        <p class="mt-1 mb-1 text-dark" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ({{total|number_format(0,"","")}}Ar)</strong></p>
+      <div class="d-block text-dark mt-4 mb-5">
+        <p class="mt-2 mb-1 text-dark" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0,"","")}}Ar)</strong></p>
       </div>
     </div>
 </div>

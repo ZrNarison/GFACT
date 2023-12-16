@@ -549,7 +549,7 @@ class Accueil extends AbstractController{
         $form -> handleRequest($rqt);
         if($form->isSubmitted()&&$form->isValid()){
             $slugify = new Slugify();
-            dd($form->get('Design')->getData());
+            // dd($form->get('Design')->getData());
             $slug = $slugify->slugify($form->get('Design')->getData() . '-' .$form->get('Qte')->getData() . '-' .$form->get('Pu')->getData() . '-' .$form->get('prd')->getData() . '-' .$form->get('duree')->getData());
             $cmd->setCmSlug($slug);
             $mng = $this-> getDoctrine()->getManager();
@@ -736,9 +736,9 @@ class Accueil extends AbstractController{
      * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
      * @return Response
      */
-    public function printFact(string $slug, ParamsRepository $params, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request, NumberConverter $numberConverter)
+    public function printFact(string $slug, ParamsRepository $params, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
     {
-        $NbLettre = $numberConverter;
+        $NbLettre = new NumberConverter();
         $print = new VeiewPrint();
         $form=$this->createForm(ViewPrintType::class, $print);
         $form->handleRequest($request);
@@ -759,7 +759,7 @@ class Accueil extends AbstractController{
         }
         $pdfOptions->set('defaultFont', 'Arial');
         $client = $client ->findOneBy(["id"=>$clcm]);
-        $Nbtotal=$NbLettre->ConvertNbLettres($total);
+        $Nbtotal=$NbLettre->numberToWord($total);
     if($form->isSubmitted()&& $form->isValid()){
         // dd($NbLettre);
         // Instantiate Dompdf with our options
