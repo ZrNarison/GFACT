@@ -34,6 +34,7 @@ use App\Form\EditPasswordType;
 use App\Form\PropertySearchType;
 use App\Service\NumberConverter;
 use App\Repository\CmdRepository;
+use App\Form\PassWordRecoveryType;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ParamsRepository;
@@ -287,47 +288,6 @@ class Accueil extends AbstractController{
         ]);
     }
 
-    // /**
-    //  * Pour afficher la liste de commande du client
-    //  * @Route("/view/Liste_Commande", name="Liste_cmd")
-    //  * @Route("/view/Listecommande")
-    //  * @Route("/view/listecommande")
-    //  * @Security("is_granted('ROLE_USER')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
-    //  */
-    // public function view_cmd(CmdRepository $cmd, SessionInterface $session,Request $request): Response
-    // {
-    //     $search = new PropertySearch();
-    //     $slug = new Slugify();
-    //     $form = $this->Createform(PropertySearchType::class,$search);
-    //     $form->handleRequest($request);
-    //     $Cmd =$cmd ->findAll();
-    //     $date = new DateTime();
-    //     $moisdate = $date ->Format("m-Y");
-    //     $anneesdate = $date ->Format("m-Y");
-    //     if($form->isSubmitted()&& $form->isValid()){
-    //         $nom=$form->get("NomClient")->getData();
-    //         $date=$form->get("DateCmd")->getData()->Format("d-m-Y");
-    //         $moisdate=$form->get("DateCmd")->getData()->Format("m-Y");
-    //         $anneesdate=$form->get("DateCmd")->getData()->Format("Y");
-    //         $slug=$nom."-".$date;
-    //         $Cmd = $cmd ->findBy(["cmdsulg"=>$slug]);
-    //         return $this->render("vue/viewC.html.twig",[
-    //             "Cmd"=> $Cmd,
-    //             "moisdate"=> $moisdate,
-    //             "anneesdate"=> $anneesdate,
-    //             "slug"=> $slug,
-    //             'form' => $form->createView()
-    //         ]);
-    //     }
-    //     return $this->render('vue/viewC.html.twig', [
-    //         'Cmd' => $Cmd,
-    //         "moisdate"=> $moisdate,
-    //         "anneesdate"=> $anneesdate,
-    //         "slug"=> '',
-    //         'form' => $form->createView()
-    //     ]);
-    // }
-
     /**
      * Pour afficher la liste d'Utilisateur
      * @Route("/view/Liste_Utilisateur", name="Liste_user")
@@ -467,49 +427,28 @@ class Accueil extends AbstractController{
     }
 
     /**
-     * //Modification du client//
-     * @Route("/{slug}/Editer", name="editclient")
-     * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
-     * @return Response
-     */
-    public function client_edit(string $slug,ClientRepository $repository,CmdClientRepository $cmsClient, Request $rqt):Response
-    {
-        
-        $client=$repository->findOneBy(['Slug'=>$slug]);
-        $form=$this->createForm(EditClientType::class, $client);
-        $form->handleRequest($rqt);
-        if($form->isSubmitted()&& $form->isValid()){
-            $slugify = new Slugify();
-            $mng = $this -> getDoctrine()->getManager();
-            $newslug = $slugify ->slugify($form->get('NomCl')->getData()).'-'.$slugify ->slugify($form->get('Adress')->getData());
-            $client->setSlug($newslug);
-            $mng -> persist($client);            
-            $mng -> flush();
-            return $this->redirectToRoute("Liste_client");
-        }
-        return $this->render("new/editcl.html.twig",[
-            "form"=> $form->createView(),
-            'client' => $client
-        ]);
-    }
-
-    /**
      * //Modification du clientcommande//
      * @Route("/Modifier/{slug}/", name="editcclient")
      * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      * @return Response
      */
-    public function clientedit(string $slug,CmdClientRepository $repository,CmdClientRepository $cmsClient, Request $rqt):Response
-    {
-        
+    public function clientedit(string $slug,CmdClientRepository $repository,Request $rqt):Response
+    {        
         $client=$repository->findOneBy(['ClSlug'=>$slug]);
         $form=$this->createForm(EditcClientType::class, $client);
         $form->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
-            $slugify = new Slugify();
+            // $NCmd=$form->get('NCmd')->getData();
+            // $CClient=$form->get('CClient')->getData();
+            // $Dos=$form->get('Dos')->getData();
+            // $Dif=$form->get('Dif')->getData();
             $mng = $this-> getDoctrine()->getManager();
+            // $client ->setNCmd($NCmd)
+            //         ->setCClient($CClient)
+            //         ->setDos($Dos)
+            //         ->setDif($Dif);
             $mng -> persist ($client);
-            $mng-> flush();
+            $mng -> flush();
             return $this->redirectToRoute("Liste_client");
         }
         return $this->render("new/editcl.html.twig",[
@@ -534,17 +473,42 @@ class Accueil extends AbstractController{
         $mgr->flush();
         return $this->redirectToRoute('Liste_client');
     }
+    /**
+     * @Route("/Edit{client}", name="EditClient")
+     */
+    public function EditClient (string $client,ClientRepository $Client,CmdClientRepository $cmdClient, Request $request)
+    {
+        $Client=$Client->findOneBy(['Slug'=>$client]);
+        $cmdclient=$cmdClient->findOneBy(['ClSlug'=>$client]);
+        $form=$this->createForm(EditClientType::class, $Client);
+        $form->handleRequest($request);
+        if($form->isSubmitted()&& $form->isValid())
+        {   $slugify = new Slugify();
+            $mng = $this-> getDoctrine()->getManager();
+            $newslug = $slugify ->slugify($form->get('NomCl')->getData().'-'.$form->get('Adress')->getData());
+            $Client->setSlug($newslug);
+            $cmdclient->setClSlug($newslug);
+            $mng -> persist ($Client);
+            // $mng -> persist ($Client,$cmdclient);
+            $mng-> flush();
+            return $this->redirectToRoute("Liste_client");
+        }
+        return $this->render ("new/editClient.html.twig",[
+            'client' => $Client,
+            "form"=> $form->createView()
+        ]);
+    }
     
     
     /**
      * //Modification de commande//
-     * @Route("/Editer-{CmSlug}", name="editcommande")
+     * @Route("/Editer/{CSlug}", name="editcommande")
      * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      * @return Response
      */
-    public function edit_cmd(string $CmSlug,CmdRepository $repository ,Request $rqt)
+    public function edit_cmd(string $CSlug,CmdRepository $repository ,Request $rqt)
     {
-        $cmd=$repository->findOneBy(['CmSlug'=>$CmSlug]);
+        $cmd=$repository->findOneBy(['CmSlug'=>$CSlug]);
         $form = $this -> createForm(EditCmdType::class, $cmd);
         $form -> handleRequest($rqt);
         if($form->isSubmitted()&&$form->isValid()){
@@ -585,6 +549,43 @@ class Accueil extends AbstractController{
         ]);
     }
 
+    /**
+     * @Route("/Réinitialisation/Password", name="reinitialisation")
+     * 
+     * @return response
+     */
+    public function reinitilization(Request $request,UserRepository $oldUser,UserPasswordEncoderInterface $encoder)
+    {
+        $modpass = new UpdatePassword();
+        $form=$this->createForm(PassWordRecoveryType::class, $modpass);
+        $form->handleRequest($request);
+        if($form->isSubmitted()&& $form->isValid()){
+            $newpseudo=$form->get('Pseudo')->getData();
+            $User=$oldUser->findOneBy(["Pseudo"=>$newpseudo]);
+            // $oldUser=$user->findOneBy(["Pseudo"=>$newpseudo]);
+            if($User == null )
+            {
+                //Afficher une erreur
+                $this->addFlash(
+                    "danger","Le nom que vous avez introduit n'est pas votre compte !");
+                return $this->redirectToRoute("reinitialisation");
+            }else{
+                //Modifier le code 
+                $newpseudo=$User->getPseudo();
+                $newPassword = $modpass->getnewPassword();
+                $hash = $encoder -> encodePassword($User,$newPassword);
+                $User->setMdp($hash);
+                $Manager = $this -> getDoctrine()->getManager();
+                $Manager -> persist($User);            
+                $Manager -> flush();
+            }
+        //Retourner vers l'accueil
+        return $this->redirectToRoute("login_access");    
+    }
+        return $this->render('security/reinitialization.html.twig',[
+            'form'=> $form->createView()
+        ]);
+    }
 
     /**
      * @Route("/Ad/new_compte", name="ncompte")

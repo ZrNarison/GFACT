@@ -15,7 +15,7 @@
         <div class="float-none mb-5">
             {% for p in param %}
                 <div class="mb-4">
-                    <img src="img/paramettre/{{ p.Logos}}" class="mb-1"/>
+                    <img src="/img/Logos Radio AVEC.png" class="mb-1"/>
                     <p class="mt-0 mb-0">{{p.Std}}</p>
                     <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
                     <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
@@ -32,11 +32,11 @@
                         <div class="float-start mt-2">
                             {% if clcm.CClient | length > 0   %}
                               <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                              <p class="mt-0 mb-0">B.C: {{client.CClient|upper}}</p>
+                              <p class="mt-0 mb-0">B.C: {{clcm.CClient|upper}}</p>
                             {% elseif clcm.Dos | length > 0 %}
                               <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                              <p class="mt-0 mb-0">B.C: {{client.CClient|upper}}</p>
-                              <p class="mt-0 mb-0">N° Diffision: {{client.Dif}}</p>
+                              <p class="mt-0 mb-0">B.C: {{clcm.CClient|upper}}</p>
+                              <p class="mt-0 mb-0">N° Diffision: {{clcm.Dif}}</p>
                             {% else %} 
                               <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
                               <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>

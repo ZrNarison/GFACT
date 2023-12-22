@@ -61,8 +61,8 @@ class CmdClient
 
     public function __construct()
     {
-        $this->Cmds = new ArrayCollection();
-        $this->cmds = new ArrayCollection();
+        // $this->Cmds = new ArrayCollection();
+        // $this->cmds = new ArrayCollection();
         $this->Cmd = new ArrayCollection();
     }
 

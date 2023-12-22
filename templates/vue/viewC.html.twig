@@ -59,7 +59,7 @@
                         <td class="">
                         {% for roles in ap.userRoles %}
                         {% if roles|upper == "ROLE_USER" %}
-                            <a href="{{path('editcommande',{'CmSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="{{path('editcommande',{'CSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                             <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.id})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
                         {% endif %}
                         <td>

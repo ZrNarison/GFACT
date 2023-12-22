@@ -41,10 +41,10 @@ class EditClientType extends AppType
                 ]))
             ->add('Rcs',TextType::class, $this->conf('RCS ','Numere du carte RCS',['required'=>false]))
             ->add('RIB',TextType::class, $this->conf('RIB ',"Numéro d'Identité Bancaire",['required'=>false]))
-            ->add('NCmd',NumberType::class, $this->conf('N° Commande : ',"Numéro de commande",['mapped'=>false,'required'=>false]))
-            ->add('CClient',TextType::class, $this->conf('Client : ',"Nom du client",['mapped'=>false,'required'=>false]))
-            ->add('Dos',NumberType::class, $this->conf('N° Dossier : ',"Numéro du dossier",['mapped'=>false,'required'=>false]))
-            ->add('Dif',TextType::class, $this->conf('Diffusion : ',"Diffusion ",['mapped'=>false,'required'=>false]))
+            // ->add('NCmd',NumberType::class, $this->conf('N° Commande : ',"Numéro de commande",['mapped'=>false,'required'=>false]))
+            // ->add('CClient',TextType::class, $this->conf('Client : ',"Nom du client",['mapped'=>false,'required'=>false]))
+            // ->add('Dos',NumberType::class, $this->conf('N° Dossier : ',"Numéro du dossier",['mapped'=>false,'required'=>false]))
+            // ->add('Dif',TextType::class, $this->conf('Diffusion : ',"Diffusion ",['mapped'=>false,'required'=>false]))
         ;
     }
 

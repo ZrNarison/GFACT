@@ -27,12 +27,12 @@
                         <td>{{l.Clients.Adress|upper}}</td>
                         <td>{{l.Clients.Tel}}</td>
                         <td>{{l.ClSlug|upper}}</td>
-                        <td class="col-lg-auto">
+                        <td class=" col-1">
                         {% for roles in ap.userRoles %}
                         {% if roles|upper == "ROLE_USER" %}
-                            <a href="{{path('editclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm"><i class="fa fa-user-o"></i></a>
-                            <a href="{{path('editcclient',{'slug':l.ClSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{l.Clients.NomCl|upper}} ?')" href="{{path('delclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                            <a href="{{path('EditClient',{'client':l.Clients.Slug})}}" class=" col-1 btn btn-sm"><i class="fa fa-male" aria-hidden="true"></i></a>
+                            <a href="{{path('editcclient',{'slug':l.ClSlug})}}" class="col-1 btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{l.Clients.NomCl|upper}} ?')" href="{{path('delclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm col-1 "><i class="fas fa-trash"></i></a>
                         {% endif %}
                         {% endfor %}
                         <td>
