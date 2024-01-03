@@ -1,3 +1,7 @@
 Accueil:
   path: /
   controller: App\Controller\Accueil::index
+
+generate_pdf:
+    path: '/generate-pdf'
+    controller: 'App\Controller\Accueil::printFact'

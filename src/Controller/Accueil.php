@@ -8,6 +8,7 @@ use App\Entity\Cmd;
 use Dompdf\Options;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\NFact;
 use App\Form\CmdType;
 use App\Entity\Client;
 use App\Entity\Params;
@@ -36,6 +37,7 @@ use App\Service\NumberConverter;
 use App\Repository\CmdRepository;
 use App\Form\PassWordRecoveryType;
 use App\Repository\UserRepository;
+use App\Repository\NFactRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ParamsRepository;
 use App\Repository\ProjectRepository;
@@ -737,10 +739,12 @@ class Accueil extends AbstractController{
      * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
      * @return Response
      */
-    public function printFact(string $slug, ParamsRepository $params, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
+    public function printFact(string $slug, ParamsRepository $params,NFactRepository $oldnumFact, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
     {
         $NbLettre = new NumberConverter();
         $print = new VeiewPrint();
+        $numfact = new NFact();
+        $mng = $this -> getDoctrine()->getManager();
         $form=$this->createForm(ViewPrintType::class, $print);
         $form->handleRequest($request);
         // Configure Dompdf according to your needs
@@ -751,6 +755,7 @@ class Accueil extends AbstractController{
         $pdfOptions = new Options();
         $param = $params ->findAll();
         $Allcmd= $Cmd ->findBy(["DateCmd"=>$datecmd,"cmdClient"=>$clcm]);
+        $countoldnumFact = count($oldnumFact ->findBy(["Dtfct"=>$datecmd,"Compte"=>$clcm->getClSlug()]));
         $total=0;
         foreach ($Allcmd as $cmd) {
             $qte = $cmd->getQte();
@@ -762,7 +767,13 @@ class Accueil extends AbstractController{
         $client = $client ->findOneBy(["id"=>$clcm]);
         $Nbtotal=$NbLettre->numberToWord($total);
     if($form->isSubmitted()&& $form->isValid()){
-        // dd($NbLettre);
+        if($countoldnumFact  < 1 ){
+            $numfact->setCompte($clcm)
+                    ->setDtfct($datecmd);
+            $mng -> persist($numfact);
+            $mng -> flush();
+        }
+        $oldFact = ($oldnumFact ->findOneBy(["Dtfct"=>$datecmd,"Compte"=>$clcm->getClSlug()]))->getId();
         // Instantiate Dompdf with our options
         $dompdf = new Dompdf($pdfOptions);
             
@@ -774,6 +785,7 @@ class Accueil extends AbstractController{
             'clcm' => $clcm,
             'client' => $client,
             'param' => $param,
+            'Numfact' => $oldFact,
             // 'logparam' => $logparam,
         ]);
         

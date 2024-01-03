@@ -5,7 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %}FACTURE{% endblock %}</title>
-        {# <script src="{{ asset('js/convert.js') }}"></script> #}
+        <script>
+        var aigS = document.querySelector('img');
+        aigS.setAttribute('src' , 'Logos Radio AVEC.png');
+        aigS.setAttribute('class', 'aig');
+        aigS.setAttribute('alt' , 'logos');
+        aigS.setAttribute('style', 'left: 183px;');
+        </script>
         {% block stylesheets %}{% endblock %}
         {% block javascript %}
         {% endblock %}
@@ -15,7 +21,7 @@
         <div class="float-none mb-5">
             {% for p in param %}
                 <div class="mb-4">
-                    <img src="/img/Logos Radio AVEC.png" class="mb-1"/>
+                    <img src="" class="mb-1" id="logos"/>
                     <p class="mt-0 mb-0">{{p.Std}}</p>
                     <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
                     <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
@@ -47,7 +53,7 @@
             {% endfor %}
         </div>
         <div class="float-none mt-5 text-center">
-            <p class="mt-3 mb-0 col-12 text-center">FACTURE N°: </p>
+            <p class="mt-3 mb-0 col-12 text-center">FACTURE N°: {{Numfact|number_format(00, ',', ' ')}} </p>
             <table class="text-center col-12">
                 <thead class="up">
                     <tr >
