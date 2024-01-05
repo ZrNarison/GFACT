@@ -61,15 +61,15 @@ class Cmd
      */
     private $DateCmd;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Annees;
+    // /**
+    //  * @ORM\Column(type="string", length=255)
+    //  */
+    // private $Annees;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Mois;
+    // /**
+    //  * @ORM\Column(type="string", length=255)
+    //  */
+    // private $Mois;
 
 
     public function getId(): ?int
@@ -185,27 +185,27 @@ class Cmd
         return $this;
     }
 
-    public function getAnnees(): ?string
-    {
-        return $this->Annees;
-    }
+    // public function getAnnees(): ?string
+    // {
+    //     return $this->Annees;
+    // }
 
-    public function setAnnees(string $Annees): self
-    {
-        $this->Annees = $Annees;
+    // public function setAnnees(string $Annees): self
+    // {
+    //     $this->Annees = $Annees;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getMois(): ?string
-    {
-        return $this->Mois;
-    }
+    // public function getMois(): ?string
+    // {
+    //     return $this->Mois;
+    // }
 
-    public function setMois(string $Mois): self
-    {
-        $this->Mois = $Mois;
+    // public function setMois(string $Mois): self
+    // {
+    //     $this->Mois = $Mois;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

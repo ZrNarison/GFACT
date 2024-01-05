@@ -50,7 +50,7 @@ class Role
 
     public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = mb_strtoupper($title);
 
         return $this;
     }

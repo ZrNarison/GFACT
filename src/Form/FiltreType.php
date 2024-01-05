@@ -2,29 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Cmd;
-use App\Entity\CmdClient;
+use App\Form\AppType;
 use App\Entity\PropertySearch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class PropertySearchType extends AbstractType
+class FiltreType extends AppType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('NomClient',EntityType::class,[
-                'class'=>CmdClient::class,
+            ->add('DateDps',DateType::class,[
                 "required"=> true,
                 "label"=>false,
-                "placeholder"=> "Merci de selectionner un client",
-                'mapped'=>false
+                "attr"=>[
+                    "placeholder"=> "Date",
+                ],"widget"=>"single_text"
             ])
-            ->add('DateCmd',DateType::class,[
+            ->add('Datefin',DateType::class,[
                 "required"=> true,
                 "label"=>false,
                 "attr"=>[

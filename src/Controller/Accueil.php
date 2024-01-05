@@ -162,13 +162,14 @@ class Accueil extends AbstractController{
             $slugify = new Slugify();
             $clcmmc= $form->get('cmdClient')->getData();
             $cmdslug=$clcmmc."-".$date->Format("d-m-Y");
-            $Annees=$date->Format("Y");
-            $Mois=$date->Format("m-Y");
+            // $Annees=$date->Format("Y");
+            // $Mois=$date->Format("m-Y");
             $mng = $this -> getDoctrine()->getManager();
             $cmd->setDateCmd($date)
-                ->setAnnees($Annees)
+                // ->setAnnees($Annees)
                 ->setCmSlug($cmdslug)
-                ->setMois($Mois);
+                // ->setMois($Mois)
+                ;
             $mng -> persist($cmd);
             $clcmmc->addCmd($cmd);
             $mng -> flush();           
@@ -255,8 +256,8 @@ class Accueil extends AbstractController{
             $nom=$form->get("NomClient")->getData();
             $datecmd=$form->get("DateCmd")->getData();
             $date=$datecmd->Format("d-m-Y");
-            $moisdate=$form->get("DateCmd")->getData()->Format("m-Y");
-            $anneesdate=$form->get("DateCmd")->getData()->Format("Y");
+            // $moisdate=$form->get("DateCmd")->getData()->Format("m-Y");
+            // $anneesdate=$form->get("DateCmd")->getData()->Format("Y");
             $slug=$nom."-".$date;
             $Cmd = $cmd->findBy(["DateCmd"=>$datecmd,"cmdClient"=>$nom]);
             $OneCmd = $cmd->findOneBy(["DateCmd"=>$datecmd,"cmdClient"=>$nom]);
@@ -266,8 +267,8 @@ class Accueil extends AbstractController{
                 return $this->render("vue/viewC.html.twig",[
                     "cmd"=> $Cmd,
                     "OneCmd"=> $OneCmd,
-                    "moisdate"=> $moisdate,
-                    "anneesdate"=> $anneesdate,
+                    // "moisdate"=> $moisdate,
+                    // "anneesdate"=> $anneesdate,
                     "nom"=> $nom,
                     "datecmd"=> $datecmd,
                     'form' => $form->createView()

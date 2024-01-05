@@ -94,7 +94,7 @@ class Params
 
     public function setStd(string $Std): self
     {
-        $this->Std = $Std;
+        $this->Std = mb_strtoupper($Std);
 
         return $this;
     }
@@ -118,7 +118,7 @@ class Params
 
     public function setPAdres(string $PAdres): self
     {
-        $this->PAdres = $PAdres;
+        $this->PAdres = mb_strtoupper($PAdres);
 
         return $this;
     }

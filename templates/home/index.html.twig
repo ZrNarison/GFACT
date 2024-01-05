@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block head %}{% endblock  %}
+{% block body %}
+{% form_theme form _self  %}
+<div class="container col-12 mt-5">
+    <div class="row card col-3 float-start">
+        <div class="panel-primary bg-info fs-2 text-center text-uppercase">Dépense</div>
+        <div class="body col-md-12">
+            <div class="form-group mt-3">
+                {{ include ('data/data.html.twig', {form: form,button:('Enregistrer')} )}}
+            </div>
+        </div>
+    </div>
+    <div class="row float-end col-8">
+        <div class="form-group mt-0">
+            {{ include ('vue/viewDepense.html.twig')}}
+        </div>
+    </div>
+</div>
+{% endblock %}

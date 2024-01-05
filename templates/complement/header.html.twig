@@ -28,6 +28,8 @@
                                 {% if roles|upper == "ROLE_USER" %}
                                     <a class="dropdown-item" href="{{path('nclient')}}">Client</a>
                                     <a class="dropdown-item" href="{{path('Commande')}}">Commande</a>
+                                {% elseif roles|upper == "ROLE_ADMIN" %}
+                                    <a class="dropdown-item" href="{{path('depense')}}">Dépense</a>
                                 {% elseif roles|upper == "ROLE_SUPERADMIN" %}
                                     <a class="dropdown-item" href="{{path('ncompte')}}">Utilisateur</a>
                                     <a class="dropdown-item" href="{{path('newportofolio')}}">Project</a>

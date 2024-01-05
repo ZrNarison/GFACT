@@ -117,7 +117,7 @@ class Client
 
     public function setNomCl(string $NomCl): self
     {
-        $this->NomCl = $NomCl;
+        $this->NomCl = mb_strtoupper($NomCl);
 
         return $this;
     }
@@ -129,7 +129,7 @@ class Client
 
     public function setAdress(?string $Adress): self
     {
-        $this->Adress = $Adress;
+        $this->Adress = mb_strtoupper($Adress);
 
         return $this;
     }
