@@ -211,7 +211,7 @@ class Accueil extends AbstractController{
             $mng -> flush();
             $this->addFlash(
                 "success",
-                " {$dev->getTitle()}</strong> Votre projet a été bien enregistrer"
+                "<strong> {$dev->getTitle()}</strong> Votre projet a été bien enregistrer"
             );
                 return $this->redirectToRoute("newportofolio");
         }
@@ -466,15 +466,22 @@ class Accueil extends AbstractController{
      * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      * @return Response
      */
-    public function del_client(string $slug,ClientRepository $clientrepository,CmdClientRepository $cmdClient)
+    public function del_client(string $slug,CmdRepository $cmdrepository,ClientRepository $clientrepository,CmdClientRepository $cmdClient)
     {
         $client=$clientrepository->findBy(['Slug'=>$slug]);
-        $cmdclient=$cmdClient->findBy(['ClSlug'=>$slug]);
-        $mgr = $this -> getDoctrine()->getManager();
-        $mgr->remove($cmdclient);
-        $mgr->remove($client);
-        $mgr->flush();
-        return $this->redirectToRoute('Liste_client');
+        $cmdclient=$cmdClient->findOneBy(['ClSlug'=>$slug]);
+        $cmd=count($cmdrepository->findBy(['cmdClient'=>$cmdclient->getId()]));
+        if ($cmd != 0 ){
+            $this->addFlash("danger","<strong> Impossible de supprimer le client car il avait de(s) commande(s)</strong> "
+            );
+            return $this->redirectToRoute("Liste_client");
+        }else{
+            $mgr = $this -> getDoctrine()->getManager();
+            $mgr->remove($cmdclient);
+            $mgr->remove($client);
+            $mgr->flush();
+            return $this->redirectToRoute('Liste_client');
+        }
     }
     /**
      * @Route("/Edit{client}", name="EditClient")
@@ -732,163 +739,6 @@ class Accueil extends AbstractController{
     {
         return $this->render("security/myuser.html.twig",[
             "user"=> $this->getUser()
-        ]);
-    }
-          
-    /**
-     * @Route("/facture/{slug}", name="pnt_fact")
-     * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
-     * @return Response
-     */
-    public function printFact(string $slug, ParamsRepository $params,NFactRepository $oldnumFact, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
-    {
-        $NbLettre = new NumberConverter();
-        $print = new VeiewPrint();
-        $numfact = new NFact();
-        $mng = $this -> getDoctrine()->getManager();
-        $form=$this->createForm(ViewPrintType::class, $print);
-        $form->handleRequest($request);
-        // Configure Dompdf according to your needs
-        $Idcmd = $Cmd ->findOneBy(["CmSlug"=>$slug]);
-        $cmdc= $Idcmd ->getCmdClient();
-        $clcm=$CmdClient ->findOneBy(["id"=>$cmdc]);
-        $datecmd= $Idcmd ->getDateCmd();
-        $pdfOptions = new Options();
-        $param = $params ->findAll();
-        $Allcmd= $Cmd ->findBy(["DateCmd"=>$datecmd,"cmdClient"=>$clcm]);
-        $countoldnumFact = count($oldnumFact ->findBy(["Dtfct"=>$datecmd,"Compte"=>$clcm->getClSlug()]));
-        $total=0;
-        foreach ($Allcmd as $cmd) {
-            $qte = $cmd->getQte();
-            $pu = $cmd->getPu();
-            $montant = $qte * $pu;
-            $total += $montant;
-        }
-        $pdfOptions->set('defaultFont', 'Arial');
-        $client = $client ->findOneBy(["id"=>$clcm]);
-        $Nbtotal=$NbLettre->numberToWord($total);
-    if($form->isSubmitted()&& $form->isValid()){
-        if($countoldnumFact  < 1 ){
-            $numfact->setCompte($clcm)
-                    ->setDtfct($datecmd);
-            $mng -> persist($numfact);
-            $mng -> flush();
-        }
-        $oldFact = ($oldnumFact ->findOneBy(["Dtfct"=>$datecmd,"Compte"=>$clcm->getClSlug()]))->getId();
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-            
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView("data/print.html.twig",[
-            'total'=> $total,
-            'Nbtotal'=>$Nbtotal,
-            'cmd' => $Allcmd,
-            'clcm' => $clcm,
-            'client' => $client,
-            'param' => $param,
-            'Numfact' => $oldFact,
-            // 'logparam' => $logparam,
-        ]);
-        
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-            
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream("FACTURE POUR ".mb_strtoupper($client->getSlug())." DU ".$datecmd->Format("d-m-Y")." .pdf", [
-            "Attachment" => true
-        ]);
-    }
-        return $this->render("new/print.html.twig",[
-            'total'=> $total,
-            'Nbtotal'=> $Nbtotal,
-            'cmd' => $Allcmd,
-            'clcm' => $clcm,
-            'client' => $client,
-            'param' => $param,
-            // 'logparam' => $logparam,
-            'form'=> $form->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/Recap/{slug}", name="recapmens")
-     * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
-     * @return Response
-     */
-    public function recapmens(string $slug,ParamsRepository $params,ClientRepository $Client,CmdRepository $Cmd,Request $rqt)
-    {
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $param = $params ->findAll();
-        $Client = $Client ->findAll();
-        $pdfOptions->set('defaultFont', 'Arial');
-        $cmd = $Cmd ->findBy(["Mois"=>$slug]);
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-        
-        // Retrieve the HTML generated in our twig file
-            $html = $this->renderView("data/mensuelle.html.twig",[
-            'cmd' => $cmd,
-            'param' => $param
-            ]);
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-        
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        // $dompdf->stream("FACTURE DE ". mb_strtoupper($nom->getNomCl())." ".($nom->getNomCl()).".pdf", [
-            $dompdf->stream("RECAPITULATION MENSUELLE ".$slug.".pdf", [
-                "Attachment" => true,
-            ]);
-    }
-
-    /**
-     * @Route("/{slug}/recap", name="recapannu")
-     * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
-     * @return Response
-     */
-    public function recapannu(string $slug,ParamsRepository $params,ClientRepository $Client,CmdRepository $Cmd,Request $rqt)
-    {
-    // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $param = $params ->findAll();
-        $Client = $Client ->findAll();
-        $pdfOptions->set('defaultFont', 'Arial');
-        $cmd = $Cmd ->findBy(["Annees"=>$slug]);
-        // dd($param);
-    // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-        
-    // Retrieve the HTML generated in our twig file
-        $html = $this->renderView("data/annuelle.html.twig",[
-            'cmd' => $cmd,
-            'param' => $param,
-        ]);
-    
-    // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-        
-    // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-    // Render the HTML as PDF
-        $dompdf->render();
-
-    // Output the generated PDF to Browser (force download)
-        // $dompdf->stream("FACTURE DE ". mb_strtoupper($nom->getNomCl())." ".($nom->getNomCl()).".pdf", [
-        $dompdf->stream("RECAPITULATION ANNUELLE ".$slug.".pdf", [
-            "Attachment" => true
         ]);
     }
 

@@ -27,15 +27,16 @@ class UserType extends AppType
     {
         $builder
             ->add('pseudo',TextType::class, $this->conf("Utilisateur ","Tapez ici le nom d'utilisateur"))
-            ->add('picture',FileType::class,$this->conf("Photo :", "Veuillez sélectionner votre photo"),['mapped'=>false])
+            ->add('picture',FileType::class,$this->conf("Photo :", ""),['mapped'=>false])
             // ->add('picture',FileType::class,['mapped'=>false,'label'=>'Photo'])
             ->add('mdp',PasswordType::class,$this->conf("Mot de passe :", "Votre mot de passe"))
-            ->add('confirmation',PasswordType::class,$this->conf("Confirmation de mot de passe :", "Veuillez confirmer votre mot de pass"))
+            ->add('confirmation',PasswordType::class,$this->conf("Confirmation de mot de passe :", "Code de confirmation"))
             ->add('class',EntityType::class,[
                 'mapped'=>false,
                 'class'=>Role::class,
                 'choice_label'=>'Title',
-                'placeholder' => "Veuillez séléction la class d'utilisateur",
+                'label'=>'Classement',
+                'placeholder' => "Veuillez séléction le classement",
             ])
             
         ;

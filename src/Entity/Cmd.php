@@ -84,7 +84,7 @@ class Cmd
 
     public function setDesign(string $Design): self
     {
-        $this->Design = $Design;
+        $this->Design = mb_strtoupper($Design);
 
         return $this;
     }

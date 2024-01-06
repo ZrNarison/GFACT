@@ -31,6 +31,7 @@
                                 {% elseif roles|upper == "ROLE_ADMIN" %}
                                     <a class="dropdown-item" href="{{path('depense')}}">Dépense</a>
                                 {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                                    <a class="dropdown-item" href="{{path('depense')}}">Dépense</a>
                                     <a class="dropdown-item" href="{{path('ncompte')}}">Utilisateur</a>
                                     <a class="dropdown-item" href="{{path('newportofolio')}}">Project</a>
                                 {% endif %}

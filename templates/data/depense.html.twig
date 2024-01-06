@@ -18,98 +18,96 @@
     </head>
     <body>
     {% block body %}
-        <div class="float-none mb-5">
-            {% for p in param %}
-                <div class="mb-4">
-                    <img src="" class="mb-1" id="logos"/>
-                    <p class="mt-0 mb-0">{{p.Std}}</p>
-                    <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
-                    <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
-                    <p class="mt-0 mb-0">Boite Postale: {{p.Bp}}</p>
-                    <p class="mt-0 mb-0">Email {{p.Mail}}</p>
-                    <p class="mt-0 mb-0">Télephone {{p.Telp}}</p>
-                    <p class="mt-0 mb-0">NIF N° {{p.PNif}}</p>
-                    <div class="float-none col-12">
-                        <div class="float-start col-8">
-                            <p class="mt-0 mb-0">STAT N° {{p.PStat}}</p>
-                            <p class="mt-0 mb-0">Compte Bancaire: {{p.PRib}}</p>
-                            <p class="mt-0 mb-0">TP {{p.Tp}}</p>
-                        </div>
-                        <div class="float-start mt-2">
-                          {% if clcm.CClient | length > 0   %}
-                            <div class="mt-0 mb-5">
-                              <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                              <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
-                              <p class="mt-0 mb-0">B.C: {{clcm.Dos}}</p>
-                              <p class="mt-0 mb-0">N° Diffusion: {{clcm.Dif}}</p>
-                              <p class="mt-0 mb-5">Client : {{clcm.CClient}}</p>
-                            </div>
-                          {% else %}
-                            <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                            <p class="mt-0 mb-2">Adresse: {{client.Adress|upper}}</p>
-                          {% endif %} 
-                          {# {% if clcm.CClient | length > 0   %}
-                            <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                            <p class="mt-0 mb-0">B.C: {{clcm.CClient|upper}}</p>
-                          {% elseif clcm.Dos | length > 0 %}
-                            <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                            <p class="mt-0 mb-0">B.C: {{clcm.CClient|upper}}</p>
-                            <p class="mt-0 mb-0">N° Diffision: {{clcm.Dif}}</p>
-                          {% else %} 
-                            <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                            <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
-                          {% endif %}  #}
-                        </div>
-                    </div>
-                </div>
+        <div class="float-none mb-2">
+          {% for p in param %}
+            <div class="mb-4">
+              {# <img src="" class="mb-1" id="logos"/> #}
+              <p class="mt-0 mb-0">{{p.Std}}</p>
+              <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
+              <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
+              <p class="mt-0 mb-0">Boite Postale: {{p.Bp}}</p>
+              <p class="mt-0 mb-0">Email {{p.Mail}}</p>
+              <p class="mt-0 mb-0">Télephone {{p.Telp}}</p>
+              <p class="mt-0 mb-0">NIF N° {{p.PNif}}</p>
+              <p class="mt-0 mb-0">STAT N° {{p.PStat}}</p>
+              <p class="mt-0 mb-0">Compte Bancaire: {{p.PRib}}</p>
+              <p class="mt-0 mb-0">TP {{p.Tp}}</p>
+            </div>
             {% endfor %}
         </div>
-        <div class="float-none mt-1 text-center">
-          {% if clcm.CClient | length > 0   %}
-            <p class="mt-5 mb-0 col-9  text-center "><strong>FACTURE N°: {{Numfact|number_format(0, '', '')}}</strong> </p>
-          {% else %}
-            <p class="mt-3 mb-0 col-11  text-center "><strong>FACTURE N°: {{Numfact|number_format(0, '', '')}}</strong> </p>
-          {% endif %} 
+        <strong class="float-none ud up text-center col-12 mb-1">rapport d'activité de station radio avec DU {{ slug|date("d/m/Y") }} JUSQU'AU {{ slug1|date("d/m/Y") }}</strong>
+        {% if Depense | length > 0 %}
+        <div class="float-none mt-1 mb-4 text-center">
+            <p class="mt-3 mb-0 col-12 text-center">DEPENSE  </p>
             <table class="text-center col-12">
                 <thead class="up">
-                    <tr >
+                    <tr>
+                        <th>date</th>
                         <th>Désignation</th>
-                        <th>Période</th>
-                        <th>Durée</th>
                         <th>Quantité</th>
                         <th>Prix unitaire</th>
                         <th>Montant</th>
-                    </tr>      
-                </thead>
-                {% for c in cmd %}
-                <tbody class="bg-white">
-                    <tr>
-                        <td class="text-left">{{c.design}}</td>
-                        <td>{{c.prd}}</td>
-                        <td>{{c.duree}}</td>
-                        <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
-                        <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
-                        <td class="text-end" >{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
                     </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for depenseDetail in Depense %}
+                        <tr>
+                            <td class="text-center">{{ depenseDetail.DateDps|date("d/m/Y") }}</td>
+                            <td class="text-center">{{ depenseDetail.Designation }}</td>
+                            <td>{{ depenseDetail.Qte|number_format(0, ',', ' ') }}</td>
+                            <td>{{ depenseDetail.PrixUnitaire|number_format(2, ',', ' ') }}</td>
+                            <td class="text-end">{{ (depenseDetail.Qte * depenseDetail.PrixUnitaire)|number_format(2, ',', ' ') }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-                {% endfor %} 
             </table>
         </div>
-        <div class="d-block col-12 mb-2 float-end mb-5">
-            <div class="d-block ">
-                <strong><p class="up mt-0 mb-0 mlx-2">TOTAL {{total|number_format(2,","," ")}}</p></strong>
-            </div>
-            <div class="d-block mt-3">
-                <p class="mt-2 mb-0" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0,""," ")}}Ar)</strong></p>
-            </div>
-            <div class="d-block mb-0">
-              <p class="ml-2x mb-0 "><em>Ihosy le, {{Ndate}}</em></p>
-            </div>
-            <div class="d-block mt-0">
-                <p class="ml-2x ud mb-0 ">Le Directeur</p>
-            </div>
-        </div>
-        <p class="mt-5 mb-5 "></p>
+    {% else %}
+        <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune dépense enregistrée</strong></div>
+    {% endif %}
+    {# <div class="d-block col-12 mb-2 float-end mb-4"> #}
+      {% if cmd | length > 0 %}
+          <div class="float-none mt-1 mb-4 text-center">
+              <p class="mt-3 mb-0 col-12 text-center">RECETTE </p>
+              <table class="text-center col-12">
+                  <thead class="up">
+                      <tr>
+                          <th>date</th>
+                          <th>Désignation</th>
+                          <th>Quantité</th>
+                          <th>Prix unitaire</th> 
+                          <th>Montant</th>
+                      </tr>      
+                  </thead>
+                  <tbody class="bg-white">
+                      {% for cmdDetail in cmd %}
+                          <tr>
+                              <td class="text-center">{{ cmdDetail.DateCmd|date("d/m/Y") }}</td>
+                              <td class="text-center">{{ cmdDetail.Design|upper }}</td>
+                              <td>{{ cmdDetail.Qte|number_format(0, ',', ' ') }}</td>
+                              <td>{{ cmdDetail.Pu|number_format(2, ',', ' ') }}</td>
+                              <td class="text-end">{{ (cmdDetail.Qte * cmdDetail.Pu)|number_format(2, ',', ' ') }}</td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      {% else %}
+          <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune recette enregistrée</strong></div>
+      {% endif %}
+      {# </div> #}
+      <div class="d-block col-12 mt-2 float-end mb-5">
+          <div class="d-block mt-3">
+              <p class="mt-2 mb-0" id="Nb">Arrêté la présente somme de recette <strong>{{NbtotalCmd|upper}} ARIARY ({{montantCmd|number_format(0," "," ")}}Ar)</strong>, dont la somme de dépense <strong>{{NbtotalDepense|upper}} ARIARY ({{montantdepense|number_format(0," "," ")}}Ar)</strong> alors que la somme encaissé est :<strong>{{NbtotalCaisse|upper}} ARIARY ({{caisse|number_format(0," "," ")}}Ar)</strong></p>
+          </div>
+          <div class="d-block">
+            <p class="ml-1 mb-0 "><em>Ihosy le, {{Ndate}}</em></p>
+          </div>
+          <div class="d-block">
+            <p class="ml-2x ud mb-0 ">Le Directeur</p>
+          </div>
+      </div>
+      <p class="mt-5 mb-5 "></p>
         {# <p class="mt-5 mb-5 "></p> #}
     {% endblock %}   
     {% block footer %}   

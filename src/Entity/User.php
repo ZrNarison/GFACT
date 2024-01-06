@@ -96,7 +96,7 @@ class User implements UserInterface
 
     public function setPseudo(string $Pseudo): self
     {
-        $this->Pseudo = $Pseudo;
+        $this->Pseudo =  mb_strtoupper($Pseudo);
 
         return $this;
     }
