@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use ORM\HashLifecycleCallBacks;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\Collection;
@@ -66,7 +67,7 @@ class Client
     private $RIB;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private $Slug;
 
@@ -75,28 +76,24 @@ class Client
      */
     private $cmd;
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return void
+     */
+    public function initializeSlug()
+    {   
+        $slugify = new Slugify();
+        $this->Slug= $slugify->Slugify($this ->NomCl.'-'.$this->Adress);
+    }
+
     public function slugify()
     {
         return $this->slugify();
     }
     public function __toString(): string
     {
-        return $this->getNomCl();
-    }
-
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     * Undocumented function
-     *
-     * @return integer|null
-     */
-    public function initializeSlug(){
-        if(empty($this->Slug)){
-            $slugify= new Slugify();
-            $this->Slug = $slugify->Slugify($this->NomCl .''.  $this->id);
-        }
+        return $this->getSlug();
     }
 
     public function __construct()

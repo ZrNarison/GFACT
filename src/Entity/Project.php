@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
+use Cocur\Slugify\Slugify;
+use ORM\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ * @HasLifecycleCallbacks()
  */
 class Project
 {
@@ -46,6 +49,20 @@ class Project
      * @ORM\Column(type="string", length=255)
      */
     private $Slug;
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return void
+     */
+    public function initialisationSlug()
+    {   
+        if(empty ($this->Slug))
+        {
+            $slugify = new Slugify();
+            $this->Slug= $slugify->slugify($this->Title."-".$this->Version);
+        }
+    }
 
     public function getId(): ?int
     {

@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Entity\Client;
 use Cocur\Slugify\Slugify;
+use ORM\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClientRepository;
 use App\Repository\CmdClientRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,7 +45,7 @@ class CmdClient
     private $Dif;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $ClSlug;
 
@@ -59,10 +61,20 @@ class CmdClient
      */
     private $Cmd;
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * Undocumented function
+     *
+     * @return integer|null
+     */
+    public function initializeSlug()
+    {
+        $slugify = new Slugify();
+    }
+
     public function __construct()
     {
-        // $this->Cmds = new ArrayCollection();
-        // $this->cmds = new ArrayCollection();
         $this->Cmd = new ArrayCollection();
     }
 

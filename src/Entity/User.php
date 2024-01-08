@@ -34,7 +34,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255 )
-     * 
+     * @Assert\Length(min=4,max=20,minMessage="Nom d'utilisateur trop court, veuillez entrer une nom valide !",maxMessage="Le mot dépasse le limite !")     * 
      */
     private $mdp;
 

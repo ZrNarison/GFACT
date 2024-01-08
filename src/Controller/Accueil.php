@@ -105,39 +105,46 @@ class Accueil extends AbstractController{
      * @Route("/client")
      * @Security("is_granted('ROLE_USER')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
-    public function new_client(Request $request){
-        $client = new Client() ;
+    public function new_client(ClientRepository $clients,Request $request){
+        $slugify = new Slugify();
+        $client  = new Client() ;
         $dateclient = new DateTime ();
         $clientCmd = new CmdClient();
         $form = $this -> createForm(ClientType::class,$client);
         $form->handleRequest($request);
         if($form->isSubmitted()){
-            $slugify = new Slugify();
+                $Slug= $slugify->Slugify($client ->getNomCl().'-'.$client->getAdress());
+                $oldclient= count($clients->findBy(["Slug"=>$Slug]));
+            if($oldclient != 0 )
+            {
+                return $this->redirectToRoute('Commande');
+            }else{
                 $nd = $form->get('NCmd')->getData();
                 $cc = $form->get('CClient')->getData();
                 $ds = $form->get('Dos')->getData();
                 $df = $form->get('Dif')->getData();
                 $b = $form->get('NomCl')->getData();
                 $a = $form->get('Adress')->getData();
-                $newslug = $slugify ->slugify($form->get('NomCl')->getData()).'-'.$slugify ->slugify($form->get('Adress')->getData());
                 $manager = $this-> getDoctrine()->getManager();
-                $client->setSlug($newslug);
+                // $client->setSlug($newslug);
                 $manager -> persist($client);
                 $clientCmd  ->setNCmd($nd)
                             ->setCClient($cc)
                             ->setDos($ds)
                             ->setDif($df)
-                            // ->setDateCmdClient($dateclient)                           
-                            ->setClSlug($newslug)                           
+                            ->setClSlug($Slug)                           
                             ;
-                $manager->persist($clientCmd);
-                $client->addCmd($clientCmd);
-            $manager -> flush(); 
-            $this->addFlash(
-                "success",
-                "Le client N° <strong> {$client->getId()}</strong> dont son nom est <strong>  {$client->getnomcl()} </strong> à été bien enregistré !"
-            );
-            return $this->redirectToRoute('Commande');
+                $manager -> persist($client );
+                $manager->persist($clientCmd);            
+                $client ->addCmd($clientCmd);
+                $manager -> flush(); 
+                $this->addFlash(
+                    "success",
+                    "Le client N° <strong> {$client->getId()}</strong> dont son nom est <strong>  {$client->getnomcl()} </strong> à été bien enregistré !"
+                );
+                return $this->redirectToRoute('Commande');
+            }
+                
            
         }
         return $this->render("new/Adcl.html.twig",[
@@ -159,16 +166,11 @@ class Accueil extends AbstractController{
         $form = $this -> createForm(CmdType::class, $cmd);
         $form->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
-            $slugify = new Slugify();
             $clcmmc= $form->get('cmdClient')->getData();
             $cmdslug=$clcmmc."-".$date->Format("d-m-Y");
-            // $Annees=$date->Format("Y");
-            // $Mois=$date->Format("m-Y");
             $mng = $this -> getDoctrine()->getManager();
             $cmd->setDateCmd($date)
-                // ->setAnnees($Annees)
                 ->setCmSlug($cmdslug)
-                // ->setMois($Mois)
                 ;
             $mng -> persist($cmd);
             $clcmmc->addCmd($cmd);
@@ -230,7 +232,8 @@ class Accueil extends AbstractController{
     public function view_clt(CmdClientRepository $Client, SessionInterface $session, $page=1): Response
     {
         $limite = 5;
-        $client =$Client ->findBy([],[],$limite,0);
+        $start = $page * $limite - $limite;
+        $client =$Client ->findBy([],[],$limite,$start);
         return $this->render('vue/viewL.html.twig', [
             'client' => $client            
         ]);
@@ -250,8 +253,10 @@ class Accueil extends AbstractController{
         $search = new PropertySearch();
         $form = $this->Createform(PropertySearchType::class,$search);
         $form->handleRequest($request);
-        $Cmd =$cmd ->findBy([],[],$limit,0);
+        $total = count($cmd ->findAll());
+        $pages = ceil($total / $limit);
         $cmdclient =$cmdclient ->findAll();
+        $Cmd = $cmd ->findBy([],[],$limit,$start);
         if($form->isSubmitted()&& $form->isValid()){
             $nom=$form->get("NomClient")->getData();
             $datecmd=$form->get("DateCmd")->getData();
@@ -275,7 +280,9 @@ class Accueil extends AbstractController{
                 ]);
             };
             return $this->render('vue/viewC.html.twig', [
-                'cmd' => $Cmd,
+                'cmd' => $Cmd ,
+                'page' => $page,
+                'pages' => $pages,
                 "nom"=> '',
                 "datecmd"=> '',
                 "CmdClient"=> '',
@@ -468,8 +475,8 @@ class Accueil extends AbstractController{
      */
     public function del_client(string $slug,CmdRepository $cmdrepository,ClientRepository $clientrepository,CmdClientRepository $cmdClient)
     {
-        $client=$clientrepository->findBy(['Slug'=>$slug]);
         $cmdclient=$cmdClient->findOneBy(['ClSlug'=>$slug]);
+        $client=$clientrepository->findOneBy(['Slug'=>$slug]);
         $cmd=count($cmdrepository->findBy(['cmdClient'=>$cmdclient->getId()]));
         if ($cmd != 0 ){
             $this->addFlash("danger","<strong> Impossible de supprimer le client car il avait de(s) commande(s)</strong> "
@@ -560,8 +567,7 @@ class Accueil extends AbstractController{
     }
 
     /**
-     * @Route("/Réinitialisation/Password", name="reinitialisation")
-     * 
+     * @Route("/Admin/Reset/Password", name="reinitialisation")
      * @return response
      */
     public function reinitilization(Request $request,UserRepository $oldUser,UserPasswordEncoderInterface $encoder)

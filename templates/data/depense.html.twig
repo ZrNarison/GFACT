@@ -1,135 +1,127 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" lang="Fr-fr">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{% block title %}FACTURE{% endblock %}</title>
-        <script>
-        var aigS = document.querySelector('img');
-        aigS.setAttribute('src' , 'Logos Radio AVEC.png');
-        aigS.setAttribute('class', 'aig');
-        aigS.setAttribute('alt' , 'logos');
-        aigS.setAttribute('style', 'left: 183px;');
-        </script>
-        {% block stylesheets %}{% endblock %}
-        {% block javascript %}
-        {% endblock %}
-    </head>
-    <body>
-    {% block body %}
-        <div class="float-none mb-2">
-          {% for p in param %}
-            <div class="mb-4">
-              {# <img src="" class="mb-1" id="logos"/> #}
-              <p class="mt-0 mb-0">{{p.Std}}</p>
-              <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
-              <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
-              <p class="mt-0 mb-0">Boite Postale: {{p.Bp}}</p>
-              <p class="mt-0 mb-0">Email {{p.Mail}}</p>
-              <p class="mt-0 mb-0">Télephone {{p.Telp}}</p>
-              <p class="mt-0 mb-0">NIF N° {{p.PNif}}</p>
-              <p class="mt-0 mb-0">STAT N° {{p.PStat}}</p>
-              <p class="mt-0 mb-0">Compte Bancaire: {{p.PRib}}</p>
-              <p class="mt-0 mb-0">TP {{p.Tp}}</p>
-            </div>
+  <head>
+    <meta charset="UTF-8" lang="Fr-fr">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}FACTURE{% endblock %}</title>
+    <script>
+    var aigS = document.querySelector('img');
+    aigS.setAttribute('src' , 'Logos Radio AVEC.png');
+    aigS.setAttribute('class', 'aig');
+    aigS.setAttribute('alt' , 'logos');
+    aigS.setAttribute('style', 'left: 183px;');
+    </script>
+    {% block stylesheets %}{% endblock %}
+    {% block javascript %}
+    {% endblock %}
+  </head>
+  <body>
+  {% block body %}
+    <div class="float-none">
+      {% for p in param %}
+        <div class="mb-2">
+          {# <img src="" class="mb-1" id="logos"/> #}
+          <p class="mt-0 mb-0">{{p.Std}}</p>
+          <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
+          <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
+          <p class="mt-0 mb-0">Boite Postale: {{p.Bp}}</p>
+          <p class="mt-0 mb-0">Email {{p.Mail}}</p>
+          <p class="mt-0 mb-0">Télephone {{p.Telp}}</p>
+          <p class="mt-0 mb-0">NIF N° {{p.PNif}}</p>
+          <p class="mt-0 mb-0">STAT N° {{p.PStat}}</p>
+          <p class="mt-0 mb-0">Compte Bancaire: {{p.PRib}}</p>
+          <p class="mt-0 mb-0">TP {{p.Tp}}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <strong class="float-none ud up text-center col-12 mb-1">rapport d'activité de station radio avec DU {{ slug|date("d/m/Y") }} JUSQU'AU {{ slug1|date("d/m/Y") }}</strong>
+    {% if Depense | length > 0 %}
+      <div class="float-none mt-1 text-center">
+        <p class="mt-3 mb-0 col-12 text-center">DEPENSE  </p>
+        <table class="text-center col-12">
+          <thead class="up">
+            <tr>
+              <th>date</th>
+              <th>Désignation</th>
+              <th>Quantité</th>
+              <th>Prix unitaire</th>
+              <th>Montant</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            {% for depenseDetail in Depense %}
+              <tr>
+                <td class="text-center">{{ depenseDetail.DateDps|date("d/m/Y") }}</td>
+                <td class="text-center">{{ depenseDetail.Designation }}</td>
+                <td>{{ depenseDetail.Qte|number_format(0, ',', ' ') }}</td>
+                <td class="text-end">{{ depenseDetail.PrixUnitaire|number_format(2, ',', ' ') }}</td>
+                <td class="text-end">{{ (depenseDetail.Qte * depenseDetail.PrixUnitaire)|number_format(2, ',', ' ') }}</td>
+              </tr>
             {% endfor %}
-        </div>
-        <strong class="float-none ud up text-center col-12 mb-1">rapport d'activité de station radio avec DU {{ slug|date("d/m/Y") }} JUSQU'AU {{ slug1|date("d/m/Y") }}</strong>
-        {% if Depense | length > 0 %}
-        <div class="float-none mt-1 mb-4 text-center">
-            <p class="mt-3 mb-0 col-12 text-center">DEPENSE  </p>
-            <table class="text-center col-12">
-                <thead class="up">
-                    <tr>
-                        <th>date</th>
-                        <th>Désignation</th>
-                        <th>Quantité</th>
-                        <th>Prix unitaire</th>
-                        <th>Montant</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    {% for depenseDetail in Depense %}
-                        <tr>
-                            <td class="text-center">{{ depenseDetail.DateDps|date("d/m/Y") }}</td>
-                            <td class="text-center">{{ depenseDetail.Designation }}</td>
-                            <td>{{ depenseDetail.Qte|number_format(0, ',', ' ') }}</td>
-                            <td>{{ depenseDetail.PrixUnitaire|number_format(2, ',', ' ') }}</td>
-                            <td class="text-end">{{ (depenseDetail.Qte * depenseDetail.PrixUnitaire)|number_format(2, ',', ' ') }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune dépense enregistrée</strong></div>
-    {% endif %}
-    {# <div class="d-block col-12 mb-2 float-end mb-4"> #}
-      {% if cmd | length > 0 %}
-          <div class="float-none mt-1 mb-4 text-center">
-              <p class="mt-3 mb-0 col-12 text-center">RECETTE </p>
-              <table class="text-center col-12">
-                  <thead class="up">
-                      <tr>
-                          <th>date</th>
-                          <th>Désignation</th>
-                          <th>Quantité</th>
-                          <th>Prix unitaire</th> 
-                          <th>Montant</th>
-                      </tr>      
-                  </thead>
-                  <tbody class="bg-white">
-                      {% for cmdDetail in cmd %}
-                          <tr>
-                              <td class="text-center">{{ cmdDetail.DateCmd|date("d/m/Y") }}</td>
-                              <td class="text-center">{{ cmdDetail.Design|upper }}</td>
-                              <td>{{ cmdDetail.Qte|number_format(0, ',', ' ') }}</td>
-                              <td>{{ cmdDetail.Pu|number_format(2, ',', ' ') }}</td>
-                              <td class="text-end">{{ (cmdDetail.Qte * cmdDetail.Pu)|number_format(2, ',', ' ') }}</td>
-                          </tr>
-                      {% endfor %}
-                  </tbody>
-              </table>
-          </div>
-      {% else %}
-          <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune recette enregistrée</strong></div>
-      {% endif %}
-      {# </div> #}
-      <div class="d-block col-12 mt-2 float-end mb-5">
-          <div class="d-block mt-3">
-              <p class="mt-2 mb-0" id="Nb">Arrêté la présente somme de recette <strong>{{NbtotalCmd|upper}} ARIARY ({{montantCmd|number_format(0," "," ")}}Ar)</strong>, dont la somme de dépense <strong>{{NbtotalDepense|upper}} ARIARY ({{montantdepense|number_format(0," "," ")}}Ar)</strong> alors que la somme encaissé est :<strong>{{NbtotalCaisse|upper}} ARIARY ({{caisse|number_format(0," "," ")}}Ar)</strong></p>
-          </div>
-          <div class="d-block">
-            <p class="ml-1 mb-0 "><em>Ihosy le, {{Ndate}}</em></p>
-          </div>
-          <div class="d-block">
-            <p class="ml-2x ud mb-0 ">Le Directeur</p>
-          </div>
+          </tbody>
+        </table>
       </div>
-      <p class="mt-5 mb-5 "></p>
-        {# <p class="mt-5 mb-5 "></p> #}
+    {% else %}
+      <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune dépense enregistrée</strong></div>
+    {% endif %}
+    {% if cmd | length > 0 %}
+      <div class="float-none mt-1 text-center">
+        <p class="mt-3 mb-0 col-12 text-center">RECETTE </p>
+        <table class="text-center col-12">
+          <thead class="up">
+            <tr>
+              <th>date</th>
+              <th>Désignation</th>
+              <th>Quantité</th>
+              <th>Prix unitaire</th> 
+              <th>Montant</th>
+            </tr>      
+          </thead>
+          <tbody class="bg-white">
+              {% for cmdDetail in cmd %}
+                <tr>
+                  <td class="text-center">{{ cmdDetail.DateCmd|date("d/m/Y") }}</td>
+                  <td class="text-center">{{ cmdDetail.Design|upper }}</td>
+                  <td>{{ cmdDetail.Qte|number_format(0, ',', ' ') }}</td>
+                  <td class="text-end">{{ cmdDetail.Pu|number_format(2, ',', ' ') }}</td>
+                  <td class="text-end">{{ (cmdDetail.Qte * cmdDetail.Pu)|number_format(2, ',', ' ') }}</td>
+                </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+        <div class="fs-1 text-danger text-center up mb-2"><strong>Aucune recette enregistrée</strong></div>
+    {% endif %}
     {% endblock %}   
     {% block footer %}   
-        <div class="float-start col-12 mt-5 mb-5 text-center footer">
-            <p class="success mt-5">__________________________________________________________</p>
-            {% for p in param %}
-            <div class="mt-0 mb-0">
-                <p class="up mt-0 mb-0">{{p.FStd}}</p>
-                <p class="mt-0 mb-0" >email: {{p.Mail}}</p>
-                <p class="mt-0 mb-0">Télephone: {{p.Telp}}</p>
-            </div>
-            {% endfor %}
+    <div class="d-block col-12">
+      <div class="d-block mt-1 mb-5">
+        <p class="mt-1 mb-0" id="Nb">Arrêté la présente somme de recette <strong>{{NbtotalCmd|upper}} ARIARY ({{montantCmd|number_format(0," "," ")}}Ar)</strong>, dont la somme de dépense <strong>{{NbtotalDepense|upper}} ARIARY ({{montantdepense|number_format(0," "," ")}}Ar)</strong> alors que la somme encaissé est :<strong>{{NbtotalCaisse|upper}} ARIARY ({{caisse|number_format(0," "," ")}}Ar)</strong></p>
+        <p class="ml-1 mt-1 mb-0 "><em>Ihosy le, {{Ndate}}</em></p>
+        <p class="ml-2x mt-0 ud mb-5">Le Directeur</p>
+      </div>
+      <div class="text-center mt-5 mb-0 fixed-bottom">
+        <p class="success mt-5 mb-0 ">__________________________________________________________</p>
+        {% for p in param %}
+        <div class="mt-0 mb-0 ">
+          <p class="up mt-0 mb-0">{{p.FStd}}</p>
+          <p class="mt-0 mb-0" >email: {{p.Mail}}</p>
+          <p class="mt-0 mb-0">Télephone: {{p.Telp}}</p>
         </div>
-    {% endblock %}   
-    </body>
+        {% endfor %}
+      </div>
+    </div>
+  {# </div> #}
+  {% endblock %}   
+  </body>
 </html>
 <style>
         .ud{text-decoration:underline}
         .d-block{display:block}
         .d-iblock{display:inline-block}
         .header,.body,.footer{margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px;
-            /*border:1px solid green*/
         }
         .collapse{
             border:1px solid black
@@ -329,5 +321,22 @@ img{width:50px;height:50px}
 .col-12 {
   flex: 0 0 auto;
   width: 100%;
+}
+.fixed-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+}
+.text-start {
+  text-align: left !important;
+}
+
+.text-end {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
 }
  </style>

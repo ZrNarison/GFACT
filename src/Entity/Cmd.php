@@ -9,7 +9,6 @@ use App\Repository\CmdRepository;
 
 /**
  * @ORM\Entity(repositoryClass=CmdRepository::class)
- * @ORM\HasLifecycleCallbacks()
  */
 class Cmd
 {
@@ -60,16 +59,6 @@ class Cmd
      * @ORM\Column(type="date")
      */
     private $DateCmd;
-
-    // /**
-    //  * @ORM\Column(type="string", length=255)
-    //  */
-    // private $Annees;
-
-    // /**
-    //  * @ORM\Column(type="string", length=255)
-    //  */
-    // private $Mois;
 
 
     public function getId(): ?int
@@ -184,28 +173,4 @@ class Cmd
 
         return $this;
     }
-
-    // public function getAnnees(): ?string
-    // {
-    //     return $this->Annees;
-    // }
-
-    // public function setAnnees(string $Annees): self
-    // {
-    //     $this->Annees = $Annees;
-
-    //     return $this;
-    // }
-
-    // public function getMois(): ?string
-    // {
-    //     return $this->Mois;
-    // }
-
-    // public function setMois(string $Mois): self
-    // {
-    //     $this->Mois = $Mois;
-
-    //     return $this;
-    // }
 }

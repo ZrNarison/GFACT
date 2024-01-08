@@ -32,7 +32,7 @@
             <table class="table table-striped table table-hover bg-success tb">
                 <thead class="text-white text-uppercase">
                     <tr>
-                        <th>N°</th>
+                        <th>Date</th>
                         <th>Désignation</th>
                         <th>Période</th>
                         <th>Durée</th>
@@ -49,7 +49,7 @@
                 {% for c in cmd %}
                 <tbody class="bg-white">
                     <tr>
-                        <td>{{c.id}}</td>
+                        <td>{{c.DateCmd|date("d/m/Y")}}</td>
                         <td>{{c.Design}}</td>
                         <td>{{c.prd}}</td>
                         <td>{{c.duree}}</td>
@@ -60,7 +60,7 @@
                         {% for roles in ap.userRoles %}
                         {% if roles|upper == "ROLE_USER" %}
                             <a href="{{path('editcommande',{'CSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.CmdClient})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.id})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
                         {% endif %}
                         <td>
                     </tr>

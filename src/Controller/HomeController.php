@@ -47,12 +47,13 @@ class HomeController extends AbstractController
         $form ->handleRequest($rqt);
         $filtre ->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
-            $slugify = new Slugify();
-            $design= $slugify ->slugify($newdepense->getDesignation());
-            $slug=$newdepense->getQte()."-".$design."-".$newdepense->getPrixUnitaire()."-".$date->Format("d-m-Y");
+            // $slugify = new Slugify();
+            // // $this->Slug = $this->Qte."-".$slugify->slugify($this->Designation).$this->PrixUnitaire."-".($this->DateDps)->Format("d-m-Y");
+            // $Slug = $newdepense->getQte()."-".$slugify->slugify($newdepense->getDesignation())."-".$newdepense->PrixUnitaire()."-".($newdepense->DateDps())->Format("d-m-Y");
             $mng = $this -> getDoctrine()->getManager();
             $newdepense->setDateDps($date)
-                    ->setSlug($slug);
+                        // ->setSlug($slug)
+                        ;
             $mng -> persist($newdepense);
             $mng -> flush();           
             return $this->redirectToRoute('depense');
@@ -99,12 +100,12 @@ class HomeController extends AbstractController
         $form ->handleRequest($rqt);
         $filtre ->handleRequest($rqt);
         if($form->isSubmitted()&& $form->isValid()){
-            $slugify = new Slugify();
-            $design= $slugify ->slugify($newdepense->getDesignation());
-            $slug=$newdepense->getQte()."-".$design."-".$newdepense->getPrixUnitaire()."-".$date->Format("d-m-Y");
+            // $slugify = new Slugify();
+            // $design= $slugify ->slugify($newdepense->getDesignation());
+            // $slug=$newdepense->getQte()."-".$design."-".$newdepense->getPrixUnitaire()."-".$date->Format("d-m-Y");
             $mng = $this -> getDoctrine()->getManager();
-            $newdepense->setDateDps($date)
-                    ->setSlug($slug);
+            $newdepense->setDateDps($date);
+                    // ->setSlug($slug);
             $mng -> persist($newdepense);
             $mng -> flush();           
             return $this->redirectToRoute('depense');
@@ -139,6 +140,7 @@ class HomeController extends AbstractController
      */
     public function printFact(string $slug, ParamsRepository $params,NFactRepository $oldnumFact, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
     {
+        // dd($slug);
         $NbLettre = new NumberConverter();
         $print = new VeiewPrint();
         $numfact = new NFact();
@@ -152,9 +154,13 @@ class HomeController extends AbstractController
         $cmdc= $Idcmd ->getCmdClient();
         $clcm=$CmdClient ->findOneBy(["id"=>$cmdc]);
         $datecmd= $Idcmd ->getDateCmd();
+        $Name= $clcm ->getClSlug();
+        // dd($datecmd,$Name);
         $pdfOptions = new Options();
         $param = $params ->findAll();
         $Allcmd= $Cmd ->findBy(["DateCmd"=>$datecmd,"cmdClient"=>$clcm]);
+        $Clients= $client ->findOneBy(["Slug"=>$Name]);
+        // dd($Clients);
         $countoldnumFact = count($oldnumFact ->findBy(["Dtfct"=>$datecmd,"Compte"=>$clcm->getClSlug()]));
         $total=0;
         foreach ($Allcmd as $cmd) {
@@ -165,6 +171,7 @@ class HomeController extends AbstractController
         }
         $pdfOptions->set('defaultFont', 'Arial');
         $client = $client ->findOneBy(["id"=>$clcm]);
+        // dd($client);
         $Nbtotal=$NbLettre->numberToWord($total);
     if($form->isSubmitted()&& $form->isValid()){
         if($countoldnumFact  < 1 ){
@@ -181,6 +188,7 @@ class HomeController extends AbstractController
         $html = $this->renderView("data/print.html.twig",[
             'total'=> $total,
             'Nbtotal'=>$Nbtotal,
+            'clients'=>$Clients,
             'cmd' => $Allcmd,
             'clcm' => $clcm,
             'client' => $client,
@@ -206,6 +214,7 @@ class HomeController extends AbstractController
         return $this->render("new/print.html.twig",[
             'total'=> $total,
             'Nbtotal'=> $Nbtotal,
+            'clients'=> $Clients,
             'cmd' => $Allcmd,
             'clcm' => $clcm,
             'client' => $client,
@@ -215,82 +224,18 @@ class HomeController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/Recap/{slug}", name="recapmens")
-    //  * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
-    //  * @return Response
-    //  */
-    // public function recapmens(string $slug,ParamsRepository $params,ClientRepository $Client,CmdRepository $Cmd,Request $rqt)
-    // {
-    //     dd('Salut');
-    //     // Configure Dompdf according to your needs
-    //     $pdfOptions = new Options();
-    //     $param = $params ->findAll();
-    //     $Client = $Client ->findAll();
-    //     $pdfOptions->set('defaultFont', 'Arial');
-    //     $cmd = $Cmd ->findBy(["Mois"=>$slug]);
-    //     // Instantiate Dompdf with our options
-    //     $dompdf = new Dompdf($pdfOptions);
-        
-    //     // Retrieve the HTML generated in our twig file
-    //         $html = $this->renderView("data/mensuelle.html.twig",[
-    //         'cmd' => $cmd,
-    //         'param' => $param
-    //         ]);
-    //     // Load HTML to Dompdf
-    //     $dompdf->loadHtml($html);
-        
-    //     // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-    //     $dompdf->setPaper('A4', 'portrait');
-
-    //     // Render the HTML as PDF
-    //     $dompdf->render();
-
-    //     // Output the generated PDF to Browser (force download)
-    //     // $dompdf->stream("FACTURE DE ". mb_strtoupper($nom->getNomCl())." ".($nom->getNomCl()).".pdf", [
-    //         $dompdf->stream("RECAPITULATION MENSUELLE ".$slug.".pdf", [
-    //             "Attachment" => true,
-    //         ]);
-    // }
-
-    // /**
-    //  * @Route("/{slug}/recap", name="recapannu")
-    //  * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas le droit d'accés à cette page !")
-    //  * @return Response
-    //  */
-    // public function recapannu(string $slug,ParamsRepository $params,ClientRepository $Client,CmdRepository $Cmd,Request $rqt)
-    // {
-    // // Configure Dompdf according to your needs
-    //     $pdfOptions = new Options();
-    //     $param = $params ->findAll();
-    //     $Client = $Client ->findAll();
-    //     $pdfOptions->set('defaultFont', 'Arial');
-    //     $cmd = $Cmd ->findBy(["Annees"=>$slug]);
-    //     // dd($param);
-    // // Instantiate Dompdf with our options
-    //     $dompdf = new Dompdf($pdfOptions);
-        
-    // // Retrieve the HTML generated in our twig file
-    //     $html = $this->renderView("data/annuelle.html.twig",[
-    //         'cmd' => $cmd,
-    //         'param' => $param,
-    //     ]);
+    /**
+     * @Route("/A propos", name="apropos")
+     * @return Response
+     */
+    public function recapmens(ParamsRepository $params):Response
+    {
+        $param = $params ->findAll();
+        return $this->render("home/Apropos.html.twig",[
+            'param' => $param,
+        ]);
     
-    // // Load HTML to Dompdf
-    //     $dompdf->loadHtml($html);
-        
-    // // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-    //     $dompdf->setPaper('A4', 'portrait');
-
-    // // Render the HTML as PDF
-    //     $dompdf->render();
-
-    // // Output the generated PDF to Browser (force download)
-    //     // $dompdf->stream("FACTURE DE ". mb_strtoupper($nom->getNomCl())." ".($nom->getNomCl()).".pdf", [
-    //     $dompdf->stream("RECAPITULATION ANNUELLE ".$slug.".pdf", [
-    //         "Attachment" => true
-    //     ]);
-    // }
+    }
 
     /**
      * @Route("/Depense{slug}/{slug1}", name="printdepense")

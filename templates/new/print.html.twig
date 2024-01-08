@@ -29,14 +29,14 @@
             </div>
             <div class="float-start mt-2">
                 {% if clcm.CClient | length > 0   %}
-                  <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                  <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
+                  <p class="mt-0 mb-0">Doit: {{clients.NomCl|upper}}</p>
+                  <p class="mt-0 mb-0">Adresse: {{clients.Adress|upper}}</p>
                   <p class="mt-0 mb-0">B.C: {{clcm.Dos}}</p>
                   <p class="mt-0 mb-0">N° Diffusion: {{clcm.Dif}}</p>
                   <p class="mt-0 mb-0">Client : {{clcm.CClient}}</p>
                 {% else %}
-                  <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                  <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
+                  <p class="mt-0 mb-0">Doit: {{clients.NomCl|upper}}</p>
+                  <p class="mt-0 mb-0">Adresse: {{clients.Adress|upper}}</p>
                 {% endif %} 
             </div>
           </div>
@@ -62,9 +62,9 @@
               <td class="text-left">{{c.design}}</td>
               <td>{{c.prd}}</td>
               <td>{{c.duree}}</td>
-              <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
-              <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
-              <td class="text-end" >{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
+              <td class="text-right">{{c.qte|number_format(0, ',', ' ')}}</td>
+              <td class="text-right">{{c.pu|number_format(2, ',', ' ')}}</td>
+              <td class="text-right" >{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
             </tr>
           </tbody>
         {% endfor %} 
@@ -72,10 +72,10 @@
     </div>
     <div class="d-iblock col-12 tw bg-white mb-0 text-dark ">
       <div class="d-block ">
-        <strong><p class="up float-end mt-0 mb-0">TOTAL {{total|number_format(0,"","")}}</p></strong>
+        <strong><p class="up float-end mt-0 mb-0">TOTAL {{total|number_format(0," "," ")}}</p></strong>
       </div>
       <div class="d-block text-dark mt-4 mb-5">
-        <p class="mt-2 mb-1 text-dark" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0,"","")}}Ar)</strong></p>
+        <p class="mt-2 mb-1 text-dark" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0," "," ")}}Ar)</strong></p>
       </div>
     </div>
 </div>

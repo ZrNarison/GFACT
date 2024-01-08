@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scale=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}G-FACT{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="/build/css/app.css"/>
+        {% block stylesheets %}
+        {% endblock %}
+        {% block javascript %}{% endblock %}
+    </head>
+    <body>
+    {% block head %}
+    <nav class="navbar-expand-lg navbar-dark bg-success navbar-responsive sticky-top" >
+        <div class="container-fluid">    
+            <div class="collapse navbar-collapse ">
+                <ul class="navbar-nav me-auto"><strong>G-FACT v2.0</strong></ul>
+                <ul class="float-end navbar-nav ml-auto col-lg-auto" >
+                    <div class="btn-group col-5" id="dma">
+                        <li><a class="nav-link form-group text-white " href="{{path ('login_access')}}">Login</a></li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}  
+    {% block body %}
+    <div class="container-wrapper bg-col-xs-12 rounded" id="articles">
+        <div class="panel-body text-dark">
+            <div class="panel-heading panel-body">
+                <div class="panel-body bg-white rounded col-md-10 mb-2 container">
+                    {% include('complement/Articles.html.twig') %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="float-end fixed-bottom">
+        {% include('complement/footer.html.twig') %}
+    </div> 
+    {% endblock %}
+    {# {% block footer %}
+    <div class="container-wrapper">
+        <li><a class="float-end fixed-bottom btn btn-outline-danger mb-3 mt-4 col-lg-1 text-danger " href="{{path ('login_access')}}">Fermer</a></li>
+    </div>
+    {% endblock %}          #}
+    </body>
+</html>

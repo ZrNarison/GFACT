@@ -87,7 +87,7 @@
                         <td class="text-left">{{c.design}}</td>
                         <td>{{c.prd}}</td>
                         <td>{{c.duree}}</td>
-                        <td class="text-end">{{c.qte|number_format(0, ',', ' ')}}</td>
+                        <td class="text-center">{{c.qte|number_format(0, ',', ' ')}}</td>
                         <td class="text-end">{{c.pu|number_format(2, ',', ' ')}}</td>
                         <td class="text-end" >{{(c.qte * c.pu)|number_format(2, ',', ' ')}}</td>
                     </tr>
@@ -97,7 +97,7 @@
         </div>
         <div class="d-block col-12 mb-2 float-end mb-5">
             <div class="d-block ">
-                <strong><p class="up mt-0 mb-0 mlx-2">TOTAL {{total|number_format(2,","," ")}}</p></strong>
+                <strong><p class="up mt-0 mb-0 text-end">TOTAL {{total|number_format(2,","," ")}}</p></strong>
             </div>
             <div class="d-block mt-3">
                 <p class="mt-2 mb-0" id="Nb">Arrêté la présente facture à la somme de <strong>{{Nbtotal|upper}} ARIARY ({{total|number_format(0,""," ")}}Ar)</strong></p>
@@ -113,10 +113,10 @@
         {# <p class="mt-5 mb-5 "></p> #}
     {% endblock %}   
     {% block footer %}   
-        <div class="float-start col-12 mt-5 mb-5 text-center footer">
-            <p class="success mt-5">__________________________________________________________</p>
+        <div class="float-start col-12 text-center footer fixed-bottom">
+            <p class="success mt-5 ">__________________________________________________________</p>
             {% for p in param %}
-            <div class="mt-0 mb-0">
+            <div class="mt-0 mb-0 ">
                 <p class="up mt-0 mb-0">{{p.FStd}}</p>
                 <p class="mt-0 mb-0" >email: {{p.Mail}}</p>
                 <p class="mt-0 mb-0">Télephone: {{p.Telp}}</p>
@@ -331,5 +331,22 @@ img{width:50px;height:50px}
 .col-12 {
   flex: 0 0 auto;
   width: 100%;
+}
+.fixed-bottom {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+}
+.text-start {
+  text-align: left !important;
+}
+
+.text-end {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
 }
  </style>

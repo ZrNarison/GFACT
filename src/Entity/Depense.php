@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\DepenseRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DepenseRepository;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @ORM\Entity(repositoryClass=DepenseRepository::class)
@@ -38,10 +40,21 @@ class Depense
     private $DateDps;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $Slug;
 
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @return void
+     */
+    public function initializeSlug()
+    {   
+        $slugify = new Slugify();
+        $this->Slug= $this->Qte."-".$slugify->slugify($this->Designation)."-".$this->PrixUnitaire."-".($this->DateDps)->Format("d-m-Y");
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
