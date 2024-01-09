@@ -11,15 +11,17 @@
                         <th>Nom</th>
                         <th>Adress</th>
                         <th>Telephone</th>
-                        <th>Client</th>
+                        <th class="text-start">Client</th>
                     {% for roles in ap.userRoles %}
-                    {% if roles|upper == "ROLE_USER" %}
-                        <th class="text-danger text-uppercase fs-5">Action</th>
-                    {% endif %}
+                        {% if roles|upper != "ROLE_SUPERADMIN" %}
+                            <th class="text-center">enregistreur</th>
+                            <th class="text-danger text-uppercase fs-5">Action</th>
+                        {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                            <th class="text-center">enregistreur</th>
+                        {% endif %}
                     {% endfor %}
                     </tr>
                 </thead>
-                {# <td>{{client.Cmd.Design|upper}}</td> #}
                 {% for l in client %}
                 <tbody class="bg-white">
                     <tr>
@@ -27,13 +29,26 @@
                         <td>{{l.Clients.Adress|upper}}</td>
                         <td>{{l.Clients.Tel}}</td>
                         <td>{{l.ClSlug|upper}}</td>
-                        <td class=" col-1">
                         {% for roles in ap.userRoles %}
-                        {% if roles|upper == "ROLE_USER" %}
-                            <a href="{{path('EditClient',{'client':l.Clients.Slug})}}" class=" col-1 btn btn-sm"><i class="fa fa-male" aria-hidden="true"></i></a>
-                            <a href="{{path('editcclient',{'slug':l.ClSlug})}}" class="col-1 btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{l.Clients.NomCl|upper}} ?')" href="{{path('delclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm col-1 "><i class="fas fa-trash"></i></a>
-                        {% endif %}
+                            {% if roles|upper != "ROLE_SUPERADMIN" %}
+                                {% for user in user %}
+                                    {% if l.Clients.User == user.id %}
+                                        <th class="text-center">{{user.Pseudo|upper}}</th>
+                                    {% endif %}    
+                                {% endfor %}
+                                <td class=" col-1">
+                                {% if l.Clients.User == UserConnected.id %}
+                                    <a href="{{path('EditClient',{'client':l.Clients.Slug})}}" class=" col-1 btn btn-sm"><i class="fa fa-male" aria-hidden="true"></i></a>
+                                    <a href="{{path('editcclient',{'slug':l.ClSlug})}}" class="col-1 btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{l.Clients.NomCl|upper}} ?')" href="{{path('delclient',{'slug':l.Clients.Slug})}}" class="btn btn-sm col-1 "><i class="fas fa-trash"></i></a>
+                                {% endif %}  
+                            {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                                {% for user in user %}
+                                    {% if l.Clients.User == user.id %}
+                                        <th class="text-center">{{user.Pseudo|upper}}</th>
+                                    {% endif %}    
+                                {% endfor %}
+                            {% endif %}
                         {% endfor %}
                         <td>
                     </tr>

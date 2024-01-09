@@ -40,9 +40,12 @@
                         <th class="text-end">Prix unitaire</th>
                         <th class="text-end">Montant</th>
                     {% for roles in ap.userRoles %}
-                        {% if roles|upper == "ROLE_USER" %}
-                        <th class="text-center">Action</th>
-                        {% endif %}
+                            {% if roles|upper != "ROLE_SUPERADMIN" %}
+                                <th>enregistreur</th>
+                                <th class="text-danger text-uppercase fs-5">Action</th>
+                            {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                                <th>enregistreur</th>
+                            {% endif %}
                     {% endfor %}
                     </tr>
                 </thead>
@@ -56,11 +59,24 @@
                         <td class="text-end">{{c.qte}}</td>
                         <td class="text-end">{{c.pu|number_format(0, ',', ' ')}}</td>
                         <td class="text-end">{{(c.qte * c.pu)|number_format(0, ',', ' ')}}</td>
-                        <td class="">
                         {% for roles in ap.userRoles %}
-                        {% if roles|upper == "ROLE_USER" %}
-                            <a href="{{path('editcommande',{'CSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.id})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                        {% if roles|upper != "ROLE_SUPERADMIN" %}
+                            {% for user in user %}
+                                {% if c.user == user.id %}
+                                    <th class="text-center">{{user.Pseudo|upper}}</th>
+                                {% endif %}    
+                            {% endfor %}
+                        <td class="">
+                            {% if c.user == UserConnected.id %}
+                                <a href="{{path('editcommande',{'CSlug':c.CmSlug})}}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a onclick="return confirm('Etes vous sur d avoir supprimer le client nommé  {{c.Design|upper}} ?')" href="{{path('del_cmd',{'slug':c.id})}}" class="btn btn-sm"><i class="fas fa-trash"></i></a>
+                            {% endif %}     
+                        {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                            {% for user in user %}
+                                {% if c.user == user.id %}
+                                    <th class="text-center">{{user.Pseudo|upper}}</th>
+                                {% endif %}    
+                            {% endfor %}
                         {% endif %}
                         <td>
                     </tr>

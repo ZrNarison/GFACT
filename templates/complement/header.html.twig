@@ -25,10 +25,9 @@
                         <div class="dropdown-menu dropdown-menu col-2" aria-labelledby="factureDropdownlink1">
                             <a class="dropdown-item dropdown-toggle float-start" data-bs-toggle="dropdown" id="newDropdownlink" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-sharp fa-solid fa-newspaper"></i>Nouveau</a>
                                 <div class="dropdown-menu submenu float-end mr-auto col-lg-auto" aria-labelledby="newDropdownlink" id="new">
-                                {% if roles|upper == "ROLE_USER" %}
+                                {% if roles|upper != "ROLE_SUPERADMIN" %}
                                     <a class="dropdown-item" href="{{path('nclient')}}">Client</a>
                                     <a class="dropdown-item" href="{{path('Commande')}}">Commande</a>
-                                {% elseif roles|upper == "ROLE_ADMIN" %}
                                     <a class="dropdown-item" href="{{path('depense')}}">Dépense</a>
                                 {% elseif roles|upper == "ROLE_SUPERADMIN" %}
                                     <a class="dropdown-item" href="{{path('depense')}}">Dépense</a>
@@ -38,10 +37,7 @@
                                 </div>
                             <a class="dropdown-item dropdown-toggle float-start" data-bs-toggle="dropdown" id="listDropdownlink" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-sharp fa-solid fa-list"></i>Liste</a>
                                 <div class="dropdown-menu submenu float-end mr-auto col-lg-auto" aria-labelledby="listDropdownlink" id="list">
-                                {% if roles|upper == "ROLE_USER" %}    
-                                    <a class="dropdown-item" href="{{path('Liste_client')}}">Client</a>
-                                    <a class="dropdown-item" href="{{path('Liste_cmd')}}">Commande</a>
-                                {% elseif roles|upper == "ROLE_ADMIN"  %}
+                                {% if roles|upper != "ROLE_SUPERADMIN" %} 
                                     <a class="dropdown-item" href="{{path('Liste_client')}}">Client</a>
                                     <a class="dropdown-item" href="{{path('Liste_cmd')}}">Commande</a>
                                     <a class="dropdown-item" href="{{path('Liste_user')}}">Utilisateur</a>

@@ -24,10 +24,13 @@
                 <th class="text-end">Prix unitaire</th>
                 <th class="text-end">Montant</th>
                 {% for roles in ap.userRoles %}
-                {% if roles|upper == "ROLE_ADMIN" %}
-                <th class=" fs-3 text-center">Action</th>
-                {% endif %}
-                {% endfor %} 
+                    {% if roles|upper != "ROLE_SUPERADMIN" %}
+                        <th>enregistreur</th>
+                        <th class=" fs-3 text-center">Action</th>
+                    {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                        <th>enregistreur</th>
+                    {% endif %}
+                {% endfor %}
             </tr>
         </thead>
     {% for Depense in Depense %}
@@ -39,12 +42,25 @@
                 <td class="text-end">{{Depense.PrixUnitaire|number_format(0, ',', ' ')}}</td>
                 <td class="text-end">{{(Depense.Qte * Depense.PrixUnitaire)|number_format(0, ',', ' ')}}</td>
                 {% for roles in ap.userRoles %}
-                {% if roles|upper == "ROLE_ADMIN" %}
-                <td class="text-center col-1">
-                    <a href="{{path ('editdps',{'slug':Depense.slug})}}" class="float-start btn btn-sm "><i class="fa-solid fa-pen-to-square text-success"></i></a>
-                    <a onclick="return confirm('Vous êtes sûr de la supprimer ?');" href="{{path ('deldepense',{'slug':Depense.id})}}" class="float-end btn btn-sm"><i class="fas fa-trash text-danger"></i></a>
-                <td>
-                {% endif %}
+                    {% if roles|upper != "ROLE_SUPERADMIN" %}
+                            {% for user in users %}
+                                {% if Depense.User == user.id %}
+                                    <th class="text-center">{{user.Pseudo|upper}}</th>
+                                {% endif %}    
+                            {% endfor %}
+                        {% if Depense.User == user %}
+                            <td class="text-center col-1">
+                                <a href="{{path ('editdps',{'slug':Depense.slug})}}" class="float-start btn btn-sm "><i class="fa-solid fa-pen-to-square text-success"></i></a>
+                                <a onclick="return confirm('Vous êtes sûr de la supprimer ?');" href="{{path ('deldepense',{'slug':Depense.id})}}" class="float-end btn btn-sm"><i class="fas fa-trash text-danger"></i></a>
+                        {% endif %}
+                        <td>
+                    {% elseif roles|upper == "ROLE_SUPERADMIN" %}
+                            {% for user in users %}
+                                {% if Depense.User == user.id %}
+                                    <th class="text-center">{{user.Pseudo|upper}}</th>
+                                {% endif %}    
+                            {% endfor %}
+                        {% endif %}
                 {% endfor %}
             </tr>
         </tbody>

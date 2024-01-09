@@ -77,6 +77,11 @@ class Client
     private $cmd;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $User;
+
+    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      * @return void
@@ -229,6 +234,18 @@ class Client
                 $cmd->setClients(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->User;
+    }
+
+    public function setUser(string $User): self
+    {
+        $this->User = $User;
 
         return $this;
     }

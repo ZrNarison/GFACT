@@ -4,7 +4,7 @@
 {% form_theme form _self  %}
 {% set ap = app.user %}
 {% for roles in ap.userRoles %}
-    {% if roles|upper == "ROLE_ADMIN" %}
+    {% if roles|upper != "ROLE_SUPERADMIN" %}
         <div class="container col-12 mt-5">
             <div class="row card col-3 float-start">
                 <div class="panel-primary bg-info fs-2 text-center text-uppercase">Dépense</div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-    {% elseif roles|upper == "ROLE_SUPERADMIN"%}
+    {% elseif roles|upper == "ROLE_SUPERADMIN" %}
         <div class="container col-12 mt-5">
             <div class="form-group mt-0">
                 {{ include ('vue/viewDepense.html.twig')}}

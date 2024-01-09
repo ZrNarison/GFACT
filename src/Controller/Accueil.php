@@ -103,16 +103,18 @@ class Accueil extends AbstractController{
      * @Route("/Nouveau", name="nclient")
      * @Route("/Client")
      * @Route("/client")
-     * @Security("is_granted('ROLE_USER')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
+     * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
     public function new_client(ClientRepository $clients,Request $request){
+
+        $user = ($this->getUser())->getId();
         $slugify = new Slugify();
         $client  = new Client() ;
         $dateclient = new DateTime ();
         $clientCmd = new CmdClient();
         $form = $this -> createForm(ClientType::class,$client);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted()&& $form->isValid()){
                 $Slug= $slugify->Slugify($client ->getNomCl().'-'.$client->getAdress());
                 $oldclient= count($clients->findBy(["Slug"=>$Slug]));
             if($oldclient != 0 )
@@ -126,7 +128,7 @@ class Accueil extends AbstractController{
                 $b = $form->get('NomCl')->getData();
                 $a = $form->get('Adress')->getData();
                 $manager = $this-> getDoctrine()->getManager();
-                // $client->setSlug($newslug);
+                $client->setUser($user);
                 $manager -> persist($client);
                 $clientCmd  ->setNCmd($nd)
                             ->setCClient($cc)
@@ -154,12 +156,11 @@ class Accueil extends AbstractController{
     /**
      * @Route("/ad/commande", name="Commande")
      * @Route("/Commande")
-     * @Route("/ad/index")
-     * @Route("/ad/Ncommande")
-     * @Security("is_granted('ROLE_USER')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
+     * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
     public function new_cmd(Request $rqt )
     {
+        $user = ($this->getUser())->getId();
         $client= new Client();
         $cmd = new Cmd();
         $date = new DateTime();
@@ -171,6 +172,7 @@ class Accueil extends AbstractController{
             $mng = $this -> getDoctrine()->getManager();
             $cmd->setDateCmd($date)
                 ->setCmSlug($cmdslug)
+                ->setUser($user)
                 ;
             $mng -> persist($cmd);
             $clcmmc->addCmd($cmd);
@@ -229,13 +231,17 @@ class Accueil extends AbstractController{
      * @Route("/view/listeclient")
      * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
-    public function view_clt(CmdClientRepository $Client, SessionInterface $session, $page=1): Response
+    public function view_clt(CmdClientRepository $Client,UserRepository $user, SessionInterface $session, $page=1): Response
     {
+        $UserConnected= $this->getUser();
         $limite = 5;
         $start = $page * $limite - $limite;
-        $client =$Client ->findBy([],[],$limite,$start);
+        $client =$Client ->findAll();
+        $user =$user ->findAll();
         return $this->render('vue/viewL.html.twig', [
-            'client' => $client            
+            'client' => $client,            
+            'user' => $user,            
+            'UserConnected' => $UserConnected,            
         ]);
     }
     	
@@ -246,8 +252,9 @@ class Accueil extends AbstractController{
      * @Route("/view/listecommande")
      * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
-    public function view_cmd(cmdClientRepository $cmdclient,cmdRepository $cmd, SessionInterface $session,Request $request,$page=1): Response
+    public function view_cmd(cmdClientRepository $cmdclient,UserRepository $user,cmdRepository $cmd, SessionInterface $session,Request $request,$page=1): Response
     {
+        $UserConnected= $this->getUser();
         $limit = 10;
         $start = $page * $limit - $limit;
         $search = new PropertySearch();
@@ -256,13 +263,12 @@ class Accueil extends AbstractController{
         $total = count($cmd ->findAll());
         $pages = ceil($total / $limit);
         $cmdclient =$cmdclient ->findAll();
+        $user =$user ->findAll();
         $Cmd = $cmd ->findBy([],[],$limit,$start);
         if($form->isSubmitted()&& $form->isValid()){
             $nom=$form->get("NomClient")->getData();
             $datecmd=$form->get("DateCmd")->getData();
             $date=$datecmd->Format("d-m-Y");
-            // $moisdate=$form->get("DateCmd")->getData()->Format("m-Y");
-            // $anneesdate=$form->get("DateCmd")->getData()->Format("Y");
             $slug=$nom."-".$date;
             $Cmd = $cmd->findBy(["DateCmd"=>$datecmd,"cmdClient"=>$nom]);
             $OneCmd = $cmd->findOneBy(["DateCmd"=>$datecmd,"cmdClient"=>$nom]);
@@ -272,10 +278,10 @@ class Accueil extends AbstractController{
                 return $this->render("vue/viewC.html.twig",[
                     "cmd"=> $Cmd,
                     "OneCmd"=> $OneCmd,
-                    // "moisdate"=> $moisdate,
-                    // "anneesdate"=> $anneesdate,
                     "nom"=> $nom,
+                    'user' => $user ,
                     "datecmd"=> $datecmd,
+                    'UserConnected' => $UserConnected,
                     'form' => $form->createView()
                 ]);
             };
@@ -284,16 +290,20 @@ class Accueil extends AbstractController{
                 'page' => $page,
                 'pages' => $pages,
                 "nom"=> '',
+                'user' => $user ,
                 "datecmd"=> '',
                 "CmdClient"=> '',
+                'UserConnected' => $UserConnected,
                 'form' => $form->createView()
             ]);
         }
         return $this->render('vue/viewC.html.twig', [
             'cmd' => $Cmd,
             "nom"=> '',
+            'user' => $user ,
             "datecmd"=> '',
             "CmdClient"=> '',
+            'UserConnected' => $UserConnected,
             'form' => $form->createView()
         ]);
     }
@@ -321,13 +331,15 @@ class Accueil extends AbstractController{
      * @Security("is_granted('ROLE_USER') or ('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      * @return Response
      */
-    public function pfolio(ProjectRepository $project)
+    public function pfolio(ParamsRepository $params,ProjectRepository $project)
     {
         $tdat = date("Y");
         $dev =$project ->findAll();
-        return $this->render("data/portfolio.html.twig",[
+        $param = $params ->findAll();
+        return $this->render("complement/Apropos.html.twig",[
             'dat'=>$tdat,
             'dev'=>$dev,
+            'param' => $param,
         ]);
         
     }
@@ -424,7 +436,7 @@ class Accueil extends AbstractController{
     /**
      * Suppression du commande
      * @Route("/Delete/{slug}", name="del_cmd")
-     * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
+     * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN') ",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      * @return Response
      */
     public function del_cmd(string $slug,CmdRepository $Cmd):Response
@@ -492,6 +504,7 @@ class Accueil extends AbstractController{
     }
     /**
      * @Route("/Edit{client}", name="EditClient")
+     * @Security("is_granted('ROLE_USER') or('ROLE_ADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
     public function EditClient (string $client,ClientRepository $Client,CmdClientRepository $cmdClient, Request $request)
     {

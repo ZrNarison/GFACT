@@ -16,6 +16,7 @@ use App\Form\ViewPrintType;
 use App\Entity\PropertySearch;
 use App\Service\NumberConverter;
 use App\Repository\CmdRepository;
+use App\Repository\UserRepository;
 use App\Repository\NFactRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ParamsRepository;
@@ -36,9 +37,11 @@ class HomeController extends AbstractController
      * @Route("/AdDepense/", name="depense")
      * @Security("is_granted('ROLE_ADMIN') or ('ROLE_SUPERADMIN')",message="Vous n'avez pas l'autorisation d'accés à cette page !")
      */
-    public function index(DepenseRepository $Depense,Request $rqt): Response
-    {
+    public function index(DepenseRepository $Depense,UserRepository $users,Request $rqt): Response
+    {   
+        $user = ($this->getUser())->getId();
         $limite = 8;
+        $slugify = new Slugify();
         $newdepense = new Depense();
         $date = new DateTime();
         $search = new PropertySearch();
@@ -46,13 +49,13 @@ class HomeController extends AbstractController
         $form = $this -> createForm(DepenseType::class,$newdepense);
         $form ->handleRequest($rqt);
         $filtre ->handleRequest($rqt);
+        $users = $users ->findAll();
         if($form->isSubmitted()&& $form->isValid()){
-            // $slugify = new Slugify();
-            // // $this->Slug = $this->Qte."-".$slugify->slugify($this->Designation).$this->PrixUnitaire."-".($this->DateDps)->Format("d-m-Y");
-            // $Slug = $newdepense->getQte()."-".$slugify->slugify($newdepense->getDesignation())."-".$newdepense->PrixUnitaire()."-".($newdepense->DateDps())->Format("d-m-Y");
+            $Slug =$newdepense->getQte()."-".$slugify->slugify($newdepense->getDesignation())."-".$newdepense->getPrixUnitaire();
             $mng = $this -> getDoctrine()->getManager();
-            $newdepense->setDateDps($date)
-                        // ->setSlug($slug)
+            $newdepense ->setDateDps($date)
+                        ->setUser($user)
+                        ->setSlug($Slug)
                         ;
             $mng -> persist($newdepense);
             $mng -> flush();           
@@ -72,6 +75,8 @@ class HomeController extends AbstractController
                return $this->render('home/index.html.twig', [
                 "Depense"=>$Depense,
                 "search"=>$search,
+                'users' => $users,
+                'user' => $user,
                 'form'=> $form->createView(),            
                 'filtre'=> $filtre->createView()
             ]);
@@ -80,6 +85,8 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             "Depense"=>$Depense,
             "search"=>$search,
+            'users' => $users,
+            'user' => $user,
             'form'=> $form->createView(),            
             'filtre'=> $filtre->createView()
         ]);
@@ -140,7 +147,6 @@ class HomeController extends AbstractController
      */
     public function printFact(string $slug, ParamsRepository $params,NFactRepository $oldnumFact, ClientRepository $client, CmdClientRepository $CmdClient, CmdRepository $Cmd, Request $request)
     {
-        // dd($slug);
         $NbLettre = new NumberConverter();
         $print = new VeiewPrint();
         $numfact = new NFact();
@@ -185,7 +191,7 @@ class HomeController extends AbstractController
         $dompdf = new Dompdf($pdfOptions);
             
         // Retrieve the HTML generated in our twig file
-        $html = $this->renderView("data/print.html.twig",[
+        $html = $this->renderView("print/print.html.twig",[
             'total'=> $total,
             'Nbtotal'=>$Nbtotal,
             'clients'=>$Clients,
@@ -207,9 +213,19 @@ class HomeController extends AbstractController
         $dompdf->render();
 
         // Output the generated PDF to Browser (force download)
-        $dompdf->stream("FACTURE POUR ".mb_strtoupper($client->getSlug())." DU ".$datecmd->Format("d-m-Y")." .pdf", [
+        $dompdf->stream("FACTURE POUR ".mb_strtoupper($Clients->getNomCl())." DU ".$datecmd->Format("d-m-Y")." .pdf", [
             "Attachment" => true
         ]);
+        // $filename = "FACTURE POUR ".mb_strtoupper($Clients->getNomCl())." DU ".$datecmd->Format("d-m-Y")." .pdf";
+        
+        // return new Response(
+        //     $snappy->getOutput($html),
+        //     200,
+        //     array(
+        //         'Content-Type' => 'application/pdf',
+        //         'Content-Disposition' => 'inline; filename="' . $filename . '.PDF"'
+        //     )
+        // );
     }
         return $this->render("new/print.html.twig",[
             'total'=> $total,
@@ -297,7 +313,6 @@ class HomeController extends AbstractController
             $pdfOptions = new Options();
             $dompdf = new Dompdf($pdfOptions);
             $html = $this->renderView('data/depense.html.twig', [
-                // return $this->render('data/depense.html.twig', [
                 'detail'=>['Depense' => $depenseDetail, 'cmd' => $cmdDetail],
                 "montantdepense" => $montantdepense,
                 "montantCmd" => $montantCmd,
@@ -317,7 +332,6 @@ class HomeController extends AbstractController
         $dompdf->render();
 
         $dompdf->stream("RAPPORT D'ACTIVITE DE STATION RADIO AVEC DU " . $slug . " JUSQU'AU " . $slug1. ".pdf", [
-            // $dompdf->stream("RAPPORT D'ACTIVITE DE STATION RADIO AVEC DU " . $slug->Format("d-m-Y") . " JUSQU'AU " . $slug1->Format("d-m-Y") . ".pdf", [
             "Attachment" => true
         ]);
     }

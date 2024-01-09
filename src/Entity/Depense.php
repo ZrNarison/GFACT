@@ -40,9 +40,14 @@ class Depense
     private $DateDps;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $Slug;
+
+    /**
+     * @ORM\Column(type="string", length=255,)
+     */
+    private $User;
 
     /**
      * @ORM\PrePersist
@@ -52,7 +57,8 @@ class Depense
     public function initializeSlug()
     {   
         $slugify = new Slugify();
-        $this->Slug= $this->Qte."-".$slugify->slugify($this->Designation)."-".$this->PrixUnitaire."-".($this->DateDps)->Format("d-m-Y");
+        $this->Slug= $this->Qte."-".$slugify->slugify($this->Designation)."-".$this->PrixUnitaire;
+        // = $this->Qte."-".$slugify->slugify($this->Designation)."-".$this->PrixUnitaire;;
     }
     
     public function getId(): ?int
@@ -116,6 +122,17 @@ class Depense
     public function setSlug(string $Slug): self
     {
         $this->Slug = $Slug;
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->User;
+    }
+
+    public function setUser(string $User): self
+    {
+        $this->User = $User;
 
         return $this;
     }

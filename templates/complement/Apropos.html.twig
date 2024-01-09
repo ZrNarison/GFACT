@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block head %}{% endblock  %}
+{% block body %}
+    <body>
+        <div class="container-wrapper bg-col-xs-12 rounded" id="articles">
+            <div class="panel-body text-dark">
+                <div class="panel-heading panel-body">
+                    <div class="panel-body bg-white rounded col-md-10 mb-2 container">
+                    <p class="navbar-nav me-auto fs-1 text-center"><strong>G-FACT v2.0</strong></p>
+                    <p class="navbar-nav me-auto fs-4 text-center text-success">Bienvenue dans nos propre site de gestion de compte</p>
+                        {% include('complement/Articles.html.twig') %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-end fixed-bottom">
+            {% include('complement/footer.html.twig') %}
+        </div> 
+        
+    </body>
+</html>
+{% endblock %}

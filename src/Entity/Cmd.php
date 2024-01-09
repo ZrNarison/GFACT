@@ -60,6 +60,11 @@ class Cmd
      */
     private $DateCmd;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $User;
+
 
     public function getId(): ?int
     {
@@ -170,6 +175,18 @@ class Cmd
     public function setDateCmd(\DateTimeInterface $DateCmd): self
     {
         $this->DateCmd = $DateCmd;
+
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->User;
+    }
+
+    public function setUser(string $User): self
+    {
+        $this->User = $User;
 
         return $this;
     }

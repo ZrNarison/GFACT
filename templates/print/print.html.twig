@@ -21,7 +21,7 @@
         <div class="float-none mb-5">
             {% for p in param %}
                 <div class="mb-4">
-                    <img src="" class="mb-1" id="logos"/>
+                    <img src="/img/paramettre/{{p.Logos}}" class="mb-1 mt-2" id="printlogo"/>
                     <p class="mt-0 mb-0">{{p.Std}}</p>
                     <p class="mt-0 mb-0">FM {{p.Frq}}MhZ</p>
                     <p class="mt-0 mb-0">Adresse {{p.PAdres}}</p>
@@ -38,15 +38,15 @@
                         <div class="float-start mt-2">
                           {% if clcm.CClient | length > 0   %}
                             <div class="mt-0 mb-5">
-                              <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                              <p class="mt-0 mb-0">Adresse: {{client.Adress|upper}}</p>
+                              <p class="mt-0 mb-0">Doit: {{clients.NomCl|upper}}</p>
+                              <p class="mt-0 mb-0">Adresse: {{clients.Adress|upper}}</p>
                               <p class="mt-0 mb-0">B.C: {{clcm.Dos}}</p>
                               <p class="mt-0 mb-0">N° Diffusion: {{clcm.Dif}}</p>
                               <p class="mt-0 mb-5">Client : {{clcm.CClient}}</p>
                             </div>
                           {% else %}
-                            <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>
-                            <p class="mt-0 mb-2">Adresse: {{client.Adress|upper}}</p>
+                            <p class="mt-0 mb-0">Doit: {{clients.NomCl|upper}}</p>
+                            <p class="mt-0 mb-2">Adresse: {{clients.Adress|upper}}</p>
                           {% endif %} 
                           {# {% if clcm.CClient | length > 0   %}
                             <p class="mt-0 mb-0">Doit: {{client.NomCl|upper}}</p>

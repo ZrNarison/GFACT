@@ -9,7 +9,6 @@ use App\Repository\ProjectRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
- * @HasLifecycleCallbacks()
  */
 class Project
 {
